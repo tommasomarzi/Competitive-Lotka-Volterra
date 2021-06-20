@@ -45,10 +45,10 @@ public:
 const int n_colors = 8;
 float color_wheel[n_colors][3] 
 {             
+    {0.16, 0.53, 0.01},                       //green
     {0.92, 0.82, 0.19},                      //Senape  
     {0.0,  0.0,  0.0},                       //black 
     {0.66, 0.13, 0.15},                       //red
-    {0.16, 0.53, 0.01},                       //green
     {0.24, 0.55, 0.87},                       //blue  
     {0.83, 0.83, 0.83},                      //Light Gray            
     {0.19, 0.92, 0.85},                      //Cyan             

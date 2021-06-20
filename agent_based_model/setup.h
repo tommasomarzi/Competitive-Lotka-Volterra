@@ -11,13 +11,10 @@
 #define up               1.0
 #define down             0.0
 #define fps              10
-#define file_values      "../data/3-species_/values.txt"
-#define file_rates       "../data/3-species_/rates.txt"
-#define file_matrix      "../data/3-species_/matrix.txt"
-#define file_capacity    "../data/3-species_/capacity.txt"
-//#define file_values      "../data/values.txt"
-//#define file_rates       "../data/rates.txt"
-//#define file_matrix      "../data/matrix.txt"
+#define file_values      "../data/3-species_1/values.txt"
+#define file_rates       "../data/3-species_1/rates.txt"
+#define file_matrix      "../data/3-species_1/matrix.txt"
+#define file_capacity    "../data/3-species_1/capacity.txt"
 #define file_output      "../output/output_abm.txt"
 
 #endif  //SETUP_H

@@ -51,7 +51,7 @@ void display(void)
 void update(int value) 
 {
 	glutKeyboardFunc(keypress);
-	if(!pause)
+	if(pause)
 	{
 		simulation->evolve();
 		glutPostRedisplay();							//marks the current window to be redisplayed

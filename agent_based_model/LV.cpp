@@ -22,15 +22,15 @@ LV::LV(const int w, const int h): width(w), height(h)
 
     to_plot.open(file_output);
 
-    colors = new float*[values_zero.size()];
+    colors = new float*[values_zero.size() + 1];
 
-    if(values_zero.size() > n_colors)
+    if((values_zero.size() + 1) > n_colors)
     {
         std::cout<<"Color palette error: colors are not enough for the number of species."<<std::endl;
         exit(1);
     }
 
-    for(int i = 0; i < values_zero.size(); i++)
+    for(int i = 0; i < values_zero.size() + 1; i++)
     {
         colors[i] = color_wheel[i];
     }
@@ -47,19 +47,19 @@ LV::LV(const int w, const int h): width(w), height(h)
 
 LV::~LV() 
 {
-    for (size_t i = 0; i < width; ++i) 
+    for(int i = 0; i < width; i++) 
     {
         delete [] grid[i];
         delete [] next_grid[i];
-    }
-    
+    } 
     delete [] grid;
     delete [] next_grid;
-    
     delete [] nb_x;
-    delete [] nb_y;
-
-    delete [] colors;
+    delete [] nb_y; 
+    for(int i = 0; i < values_zero.size(); i++)
+    {
+        delete [] colors[i];
+    }
 }
 
 
@@ -67,6 +67,7 @@ void LV::configuration()
 {
     std::cout<<std::endl;
     std::cout<<"::--------------------------- COMPETITIVE LOTKA-VOLTERRA ---------------------------:: "<<std::endl<<std::endl<<std::endl;
+    std::cout<<":: BACKGROUND COLOR:                        ( "<<n_rows<<" x "<<n_cols<<") cells (GREEN)"<<std::endl<<std::endl;
     std::cout<<":: NUMBER OF SPECIES:                         "<<values_zero.size()<<std::endl<<std::endl;
     std::cout<<":: COLORS:                                  ( ";
     for(int i = 0; i < values_zero.size(); i++)
@@ -76,11 +77,10 @@ void LV::configuration()
             case 0: std::cout<<"SENAPE"; break;
             case 1: std::cout<<","<<'\t'<<"BLACK"; break;
             case 2: std::cout<<","<<'\t'<<"RED"; break;
-            case 3: std::cout<<","<<'\t'<<"GREEN"; break;
-            case 4: std::cout<<","<<'\t'<<"BLUE"; break;
-            case 5: std::cout<<","<<'\t'<<"LIGHT GRAY"; break;
-            case 6: std::cout<<","<<'\t'<<"CYAN"; break;
-            case 7: std::cout<<","<<'\t'<<"PURPLE"; break;
+            case 3: std::cout<<","<<'\t'<<"BLUE"; break;
+            case 4: std::cout<<","<<'\t'<<"LIGHT GRAY"; break;
+            case 5: std::cout<<","<<'\t'<<"CYAN"; break;
+            case 6: std::cout<<","<<'\t'<<"PURPLE"; break;
         }
     }
     std::cout<<" )"<<std::endl<<std::endl;
@@ -113,13 +113,13 @@ void LV::configuration()
 
 float* LV::get_specie_color(int x, int y)
 {
-    return colors[grid[x][y]];
+    return colors[grid[x][y] + 1];
 }
 
 
 int LV::neighborhood(int x, int y)
 {
-    vector<int> presences(values_zero.size(), 0);
+    vector<int> presences(values_zero.size() + 1, 0);
     int result;
 	nb_x[0] = (x == 0 ? width - 1: x - 1);
 	nb_x[1] = x;
@@ -133,7 +133,7 @@ int LV::neighborhood(int x, int y)
         {
             if (!(nb_x[i] == x && nb_y[j] == y)) 
             {
-                presences[grid[nb_x[i]][nb_y[j]]]++;
+                presences[grid[nb_x[i]][nb_y[j]] + 1]++;
             }
 		}
 	}
@@ -144,17 +144,13 @@ int LV::neighborhood(int x, int y)
 
 int LV::normalizer()
 {
-    int result;
-    double den = 0;
+    int result = -1;
+    int cells = n_rows*n_cols;
     double rv = (double)rand() / RAND_MAX;
     double prob = 0;
-    for(size_t i = 0; i < values_zero.size(); i++) 
+    for(int i = 0; i < values_zero.size(); i++)
     {
-        den += values_zero[i];
-    }
-    for(size_t i = 0; i < values_zero.size(); i++)
-    {
-        prob += values_zero[i]/den;
+        prob += values_zero[i]*capacity[i]/cells;
         if(rv < prob)
         {
             result = i;
