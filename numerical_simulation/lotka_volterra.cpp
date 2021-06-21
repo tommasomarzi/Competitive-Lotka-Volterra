@@ -17,7 +17,6 @@ double h_half = h/2;
 double h_six = h/6;
 
 
-
 vector<double> VectorTimesScalar(vector<double> v, double k)
 {
     vector<double> result(v.begin(), v.end());
@@ -89,32 +88,19 @@ vector<double> runge_kutta(vector<double> values, vector<double> rate, vector<ve
 }
 
 
-
 int main()
 {
     ofstream toplot;
     vector<vector<double>> interaction;
     vector<double> values_zero, values, rates;
-    string outfile = "../data/4-species-roques/output.txt";
-    string filematrix = "../data/4-species-roques/matrix.txt";
-    string filevalues = "../data/4-species-roques/values.txt";
-    string filerates = "../data/4-species-roques/rates.txt";
+    string outfile =    "../data/3-species_1/output.txt";
+    string filematrix = "../data/3-species_1/matrix.txt";
+    string filevalues = "../data/3-species_1/values.txt";
+    string filerates =  "../data/3-species_1/rates.txt";
     toplot.open (outfile);
     MatrixReader(interaction, filematrix);
     VectorReader(values_zero, filevalues);
     VectorReader(rates, filerates);
-    /*
-    for (auto el : values)  cout <<el<< ' ';
-    cout<<endl;
-    for (auto el : rates)  cout <<el<< ' ';
-    cout<<endl;
-    for (auto row : interaction) {
-    for (auto el : row) {
-        cout << el << ' ';
-    }
-    cout << "\n";
-    }
-    */
     for ( int n = 0; n < iter_max; ++n)	
     {
     	values = runge_kutta(values_zero, rates, interaction);    

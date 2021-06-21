@@ -30,6 +30,7 @@ private:
     int normalizer();
     int normalizer(vector<int>);
     int normalizer(vector<int>, int);
+    int filler(vector<int>);
     void configuration();
     void print_output();
     
