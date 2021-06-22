@@ -4,15 +4,17 @@
 #include <functional>
 #include <sstream>
 #include <string>
+#include <cstring>
 #include <fstream>
 #include <stdlib.h>
 #include "../utilities/reader.cpp"
+#include "../utilities/setup.h"
 
 using namespace std;
 
 
 double h = 0.01;
-int iter_max = 100000;
+int iter_max = 1000;
 double h_half = h/2;
 double h_six = h/6;
 
@@ -93,25 +95,47 @@ int main()
     ofstream toplot;
     vector<vector<double>> interaction;
     vector<double> values_zero, values, rates;
-    string outfile =    "../data/3-species_1/output.txt";
-    string filematrix = "../data/3-species_1/matrix.txt";
-    string filevalues = "../data/3-species_1/values.txt";
-    string filerates =  "../data/3-species_1/rates.txt";
-    toplot.open (outfile);
-    MatrixReader(interaction, filematrix);
-    VectorReader(values_zero, filevalues);
-    VectorReader(rates, filerates);
+    if(ENABLE_OUTPUT)
+    {
+        toplot.open("../data/" + string(folder) + "/output_ns.txt");
+    }
+    MatrixReader(interaction, "../data/" + string(folder) + "/values.txt");
+    VectorReader(values_zero, "../data/" + string(folder) + "/values.txt");
+    VectorReader(rates,       "../data/" + string(folder) + "/rates.txt");
+    /*
+    cout<<"hol"<<endl;
+    for (auto el : values_zero)  cout <<el<<" a ";
+    cout<<endl;
+    for (auto el : rates)  cout <<el<< ' ';
+    cout<<endl;
+    for (auto row : interaction) {
+    for (auto el : row) {
+        cout << el << ' ';
+    }
+    cout << "\n";
+    }
+    */
     for ( int n = 0; n < iter_max; ++n)	
     {
     	values = runge_kutta(values_zero, rates, interaction);    
         values_zero = values;
-        for (auto el : values)  
+        if(ENABLE_OUTPUT)
         {
-            toplot <<el<< ' ';
+            for (auto el : values)  
+            {
+                toplot <<el<< ' ';
+            }
+            toplot<<endl;
         }
-        toplot<<endl;
     }
-    toplot.close();
-    system("/usr/bin/python3 macro.py");
+    if(ENABLE_OUTPUT)
+    {
+        toplot.close();
+    }
+
+    if(ENABLE_PLOT)
+    {
+        system("/usr/bin/python3 macro.py");
+    }
 
 }

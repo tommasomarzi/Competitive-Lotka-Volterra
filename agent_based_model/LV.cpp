@@ -15,14 +15,14 @@ LV::LV(const int w, const int h): width(w), height(h)
     
     iter = 0;
 
-    MatrixReader(interaction, file_matrix);
-    VectorReader(values_zero, file_values);
-    VectorReader(rates, file_rates);
-    VectorReader(capacity, file_capacity);
+    MatrixReader(interaction, "../data/" + string(folder) + "/values.txt");
+    VectorReader(values_zero, "../data/" + string(folder) + "/values.txt");
+    VectorReader(rates,       "../data/" + string(folder) + "/rates.txt");
+    VectorReader(capacity,    "../data/" + string(folder) + "/capacity.txt");
 
     if(ENABLE_OUTPUT)
     {
-        to_plot.open(file_output);
+        to_plot.open( "../data/" + string(folder) + "/output_abm.txt");
     }
 
     colors = new float*[values_zero.size() + 1];
