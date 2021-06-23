@@ -15,14 +15,14 @@ LV::LV(const int w, const int h): width(w), height(h)
     
     iter = 0;
 
-    MatrixReader(interaction, "../data/" + string(folder) + "/values.txt");
-    VectorReader(values_zero, "../data/" + string(folder) + "/values.txt");
-    VectorReader(rates,       "../data/" + string(folder) + "/rates.txt");
-    VectorReader(capacity,    "../data/" + string(folder) + "/capacity.txt");
+    MatrixReader(interaction, "data/" + string(folder) + "/matrix.txt");
+    VectorReader(values_zero, "data/" + string(folder) + "/values.txt");
+    VectorReader(rates,       "data/" + string(folder) + "/rates.txt");
+    VectorReader(capacity,    "data/" + string(folder) + "/capacity.txt");
 
     if(ENABLE_OUTPUT)
     {
-        to_plot.open( "../data/" + string(folder) + "/output_abm.txt");
+        to_plot.open( "data/" + string(folder) + "/output_abm.txt");
     }
 
     colors = new float*[values_zero.size() + 1];
@@ -70,7 +70,7 @@ void LV::configuration()
 {
     std::cout<<std::endl;
     std::cout<<"::--------------------------- COMPETITIVE LOTKA-VOLTERRA ---------------------------:: "<<std::endl<<std::endl<<std::endl;
-    std::cout<<":: BACKGROUND:                              ( "<<n_rows<<" x "<<n_cols<<") cells (GREEN)"<<std::endl<<std::endl;
+    std::cout<<":: BACKGROUND:                              ( "<<n_rows<<" x "<<n_cols<<" ) cells (GREEN)"<<std::endl<<std::endl;
     std::cout<<":: NUMBER OF SPECIES:                         "<<values_zero.size()<<std::endl<<std::endl;
     std::cout<<":: COLORS:                                  ( ";
     for(int i = 0; i < values_zero.size(); i++)
@@ -323,6 +323,12 @@ void LV::evolve()
     int** swap = grid;
     grid = next_grid;
     next_grid = swap;
+
+    if(ENABLE_OUTPUT)
+    {
+        print_output();
+    }
+    
     if(iter == ITER_MAX)
     {
         if(ENABLE_OUTPUT)
@@ -330,10 +336,6 @@ void LV::evolve()
             to_plot.close();
         }
         exit(0);
-    }
-    if(ENABLE_OUTPUT)
-    {
-        print_output();
     }
 }
 
@@ -353,7 +355,7 @@ void LV::print_output()
     }
     for(int i = 0; i < values_zero.size(); i++)
     {   
-        to_plot<<species[i]/(n_cols*n_rows)<< ' ';
+        to_plot<<species[i]/(capacity[i])<< ' ';
     }
     to_plot<<std::endl;
 }

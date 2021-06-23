@@ -13,8 +13,7 @@
 using namespace std;
 
 
-double h = 0.01;
-int iter_max = 1000;
+double h = 0.00001;
 double h_half = h/2;
 double h_six = h/6;
 
@@ -97,11 +96,11 @@ int main()
     vector<double> values_zero, values, rates;
     if(ENABLE_OUTPUT)
     {
-        toplot.open("../data/" + string(folder) + "/output_ns.txt");
+        toplot.open("data/" + string(folder) + "/output_ns.txt");
     }
-    MatrixReader(interaction, "../data/" + string(folder) + "/values.txt");
-    VectorReader(values_zero, "../data/" + string(folder) + "/values.txt");
-    VectorReader(rates,       "../data/" + string(folder) + "/rates.txt");
+    MatrixReader(interaction, "data/" + string(folder) + "/values.txt");
+    VectorReader(values_zero, "data/" + string(folder) + "/values.txt");
+    VectorReader(rates,       "data/" + string(folder) + "/rates.txt");
     /*
     cout<<"hol"<<endl;
     for (auto el : values_zero)  cout <<el<<" a ";
@@ -115,7 +114,7 @@ int main()
     cout << "\n";
     }
     */
-    for ( int n = 0; n < iter_max; ++n)	
+    for ( int n = 0; n < ITER_MAX; ++n)	
     {
     	values = runge_kutta(values_zero, rates, interaction);    
         values_zero = values;
@@ -135,7 +134,7 @@ int main()
 
     if(ENABLE_PLOT)
     {
-        system("/usr/bin/python3 macro.py");
+        system("/usr/bin/python3 utilities/plotter.py");
     }
 
 }
