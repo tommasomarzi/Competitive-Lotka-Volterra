@@ -297,9 +297,17 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
                 {
                     result = -1;                    // A + A -> 0
                 }
-                else if(i == 0)   
+                else if(i == 0)                      // A + 0 -> A || move
                 {
-                    result = specie;                // A + 0 -> A
+                    int cell = random_walk(empty_cells);
+                    if(cell == 9)
+                    {
+                        result = specie;            // A + 0 -> A
+                    }
+                    else
+                    {
+                        result = values_zero.size() + cell + 1;     // A + 0 -> move
+                    }
                 }
                 else
                 {
@@ -316,7 +324,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
 
 int LV::random_walk(vector<bool> empty_cells)
 {
-    double result;
+    int result = 9;
     int count_empty = 1;
     for(int i = 0; i < empty_cells.size(); i++)
     {
@@ -326,14 +334,15 @@ int LV::random_walk(vector<bool> empty_cells)
         }
     }
     double rv = (double)rand() / RAND_MAX;
-    double prob = 1/count_empty;
-    for(int i = 0; i < (empty_cells.size() + 1); i++)
+    double prob = 1./count_empty;
+    for(int i = 0; i < empty_cells.size(); i++)
     {
         if(rv < prob)
         {
             if(empty_cells[i] == true)
             {
                 result = i;
+                break;
             }
         }
         else
@@ -366,24 +375,40 @@ void LV::evolve()
         {
             prev_result = grid[x][y];
             result = neighborhood(x, y);
-            if(result < (values_zero.size() + 1))
+            if((int(values_zero.size()) + 1) > result)
             {
                 grid[x][y] = result;
             }
             else 
             {
                 grid[x][y] = -1;
-                shift = result - (values_zero.size() + 1);
+                shift = result - (int(values_zero.size()) + 1);
                 switch(shift)
                 {
-                    case 0: grid[nb_x[0]][nb_y[0]] = prev_result;
-                    case 1: grid[nb_x[0]][nb_y[1]] = prev_result;
-                    case 2: grid[nb_x[0]][nb_y[2]] = prev_result;
-                    case 3: grid[nb_x[1]][nb_y[0]] = prev_result;
-                    case 4: grid[nb_x[1]][nb_y[2]] = prev_result;
-                    case 5: grid[nb_x[2]][nb_y[0]] = prev_result;
-                    case 6: grid[nb_x[2]][nb_y[1]] = prev_result;
-                    case 7: grid[nb_x[2]][nb_y[1]] = prev_result;
+                    case 0: 
+                        grid[nb_x[0]][nb_y[0]] = prev_result;
+                        break;
+                    case 1: 
+                        grid[nb_x[0]][nb_y[1]] = prev_result;
+                        break;
+                    case 2: 
+                        grid[nb_x[0]][nb_y[2]] = prev_result;
+                        break;
+                    case 3: 
+                        grid[nb_x[1]][nb_y[0]] = prev_result;
+                        break;
+                    case 4: 
+                        grid[nb_x[1]][nb_y[2]] = prev_result;
+                        break;
+                    case 5: 
+                        grid[nb_x[2]][nb_y[0]] = prev_result;
+                        break;
+                    case 6: 
+                        grid[nb_x[2]][nb_y[1]] = prev_result;
+                        break;
+                    case 7: 
+                        grid[nb_x[2]][nb_y[2]] = prev_result;
+                        break;
                 }
             }
             ++iter;
