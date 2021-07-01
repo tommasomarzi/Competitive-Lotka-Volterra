@@ -387,19 +387,19 @@ void LV::evolve()
                 }
             }
             ++iter;
+            if(ENABLE_OUTPUT)
+            {
+                print_output();
+            }
+            if(iter == ITER_MAX)
+            {
+                if(ENABLE_OUTPUT)
+                {
+                    to_plot.close();
+                }
+                exit(0);
+            }
         }
-    }
-    if(ENABLE_OUTPUT)
-    {
-        print_output();
-    }
-    if(iter > ITER_MAX)
-    {
-        if(ENABLE_OUTPUT)
-        {
-            to_plot.close();
-        }
-        exit(0);
     }
 }
 
