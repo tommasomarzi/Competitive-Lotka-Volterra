@@ -39,7 +39,7 @@ if setup['ENABLE_COMPARISON'] == "true":
         plt.savefig(path_to_save  + '_comparison_' + str(nspecie) + '.png')
     else:
         plt.show()
-else:
+if setup['ENABLE_MODEL'] == "true":
     for path in path_list:
         if path == path_ns:
             model = "ns"

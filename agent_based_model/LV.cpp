@@ -116,7 +116,10 @@ void LV::configuration()
         std::cout<<"                                              ";
     }
     std::cout<<std::endl<<std::endl;
-    std::cout<<"Press 'p' to pause/resume, 'i' to stamp the current iteration, 'e' to exit."<<std::endl<<std::endl;
+    if(ENABLE_GRAPHICS)
+    {
+        std::cout<<"Press 'p' to pause/resume, 'i' to stamp the current iteration, 'e' to exit."<<std::endl<<std::endl;
+    }
 }
 
 
@@ -130,6 +133,7 @@ int LV::neighborhood(int x, int y)
 {
     int result;
     vector<int> presences(values_zero.size() + 1, 0);
+    vector<bool> empty_cells(9, false);
 
 	nb_x[0] = (x == 0 ? width - 1: x - 1);
 	nb_x[1] = x;
@@ -145,6 +149,10 @@ int LV::neighborhood(int x, int y)
             if (!(nb_x[i] == x && nb_y[j] == y)) 
             {
                 presences[grid[nb_x[i]][nb_y[j]] + 1]++;
+                if((grid[nb_x[i]][nb_y[j]] + 1) == 0)
+                {
+                    empty_cells[i*3 + j] = true;
+                }
             }
 		}
 	}
@@ -155,7 +163,7 @@ int LV::neighborhood(int x, int y)
     }
     else
     {
-        result = normalizer(presences, grid[x][y]);
+        result = normalizer(presences, empty_cells, grid[x][y]);
     }
 
     return result;
@@ -246,7 +254,7 @@ int LV::normalizer(vector<int> presences)
 }
 
 
-int LV::normalizer(vector<int> presences, int specie)
+int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
 {    
     int result;
     double den = 0.0;
@@ -260,7 +268,15 @@ int LV::normalizer(vector<int> presences, int specie)
     
     if(den < 1e-10)
     {
-        result = specie;
+        int cell = random_walk(empty_cells);
+        if(cell == 9)
+        {
+            result = specie;
+        }
+        else
+        {
+            result = values_zero.size() + cell + 1;
+        }
     }
     else
     {   
@@ -298,6 +314,37 @@ int LV::normalizer(vector<int> presences, int specie)
 }
 
 
+int LV::random_walk(vector<bool> empty_cells)
+{
+    double result;
+    int count_empty = 1;
+    for(int i = 0; i < empty_cells.size(); i++)
+    {
+        if(empty_cells[i] == true)
+        {
+            count_empty++;
+        }
+    }
+    double rv = (double)rand() / RAND_MAX;
+    double prob = 1/count_empty;
+    for(int i = 0; i < (empty_cells.size() + 1); i++)
+    {
+        if(rv < prob)
+        {
+            if(empty_cells[i] == true)
+            {
+                result = i;
+            }
+        }
+        else
+        {
+            prob += 1/count_empty;
+        }
+    }
+    return result;
+}
+
+
 void LV::initializer_fill() 
 {      
 	for(int i = 0; i < width; ++i)
@@ -312,24 +359,41 @@ void LV::initializer_fill()
 
 void LV::evolve() 
 {
-    ++iter;
+    int result, shift, prev_result;
     for (int x = 0; x < width; ++x) 
     {
 		for(int y = 0; y < height; ++y) 
         {
-            next_grid[x][y] = neighborhood(x, y);
+            prev_result = grid[x][y];
+            result = neighborhood(x, y);
+            if(result < (values_zero.size() + 1))
+            {
+                grid[x][y] = result;
+            }
+            else 
+            {
+                grid[x][y] = -1;
+                shift = result - (values_zero.size() + 1);
+                switch(shift)
+                {
+                    case 0: grid[nb_x[0]][nb_y[0]] = prev_result;
+                    case 1: grid[nb_x[0]][nb_y[1]] = prev_result;
+                    case 2: grid[nb_x[0]][nb_y[2]] = prev_result;
+                    case 3: grid[nb_x[1]][nb_y[0]] = prev_result;
+                    case 4: grid[nb_x[1]][nb_y[2]] = prev_result;
+                    case 5: grid[nb_x[2]][nb_y[0]] = prev_result;
+                    case 6: grid[nb_x[2]][nb_y[1]] = prev_result;
+                    case 7: grid[nb_x[2]][nb_y[1]] = prev_result;
+                }
+            }
+            ++iter;
         }
     }
-    int** swap = grid;
-    grid = next_grid;
-    next_grid = swap;
-
     if(ENABLE_OUTPUT)
     {
         print_output();
     }
-    
-    if(iter == ITER_MAX)
+    if(iter > ITER_MAX)
     {
         if(ENABLE_OUTPUT)
         {

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <functional>
 #include <sstream>
 #include <string>
 #include <cstring>
@@ -13,7 +12,7 @@
 using namespace std;
 
 
-double h = 0.00001;
+double h = 0.001;
 double h_half = h/2;
 double h_six = h/6;
 
@@ -98,7 +97,7 @@ int main()
     {
         toplot.open("data/" + string(folder) + "/output_ns.txt");
     }
-    MatrixReader(interaction, "data/" + string(folder) + "/values.txt");
+    MatrixReader(interaction, "data/" + string(folder) + "/matrix.txt");
     VectorReader(values_zero, "data/" + string(folder) + "/values.txt");
     VectorReader(rates,       "data/" + string(folder) + "/rates.txt");
     /*
