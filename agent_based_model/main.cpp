@@ -27,6 +27,7 @@ int main(int argc, char **argv)
 		update(0);
 		glutKeyboardFunc(keypress);
 		glutMainLoop();						  //enters the GLUT event processing loop
+		
 	}
 	else
 	{

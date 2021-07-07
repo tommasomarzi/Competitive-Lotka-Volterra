@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import re
 from mpl_toolkits.mplot3d import Axes3D
 
+def log_growth(t):
+    return 1/(1+ (1/0.005 -1)*np.exp(-0.0005*t*3.5))
+
 setup = {}
 with open("utilities/setup.h") as setup_file:
     for line in setup_file.readlines():
@@ -26,20 +29,25 @@ if setup['ENABLE_COMPARISON'] == "true":
     
     if file_ns.ndim == 1:
         nspecie = 1
-        plt.plot(iterations, file_ns,  label = 'specie ' + str(nspecie) + '_ns')
-        plt.plot(iterations, file_abm, label = 'specie ' + str(nspecie) + '_abm')
+        plt.plot(iterations, file_ns,  label = 'numerical simulation')
+        plt.plot(iterations, file_abm, label = 'agent-based model')
+        plt.plot(iterations, log_growth(iterations), label = 'exact solution', marker = 'o', markersize=0.01)
         plt.legend()
     else:
         nspecie = file_ns.shape[1]
         for specie in range(nspecie):
-            plt.plot(iterations,file_ns[:,specie],  label = 'specie ' + str(specie) + '_ns')
-            plt.plot(iterations,file_abm[:,specie], label = 'specie ' + str(specie) + '_abm')
+            plt.plot(iterations,file_ns[:,specie],  label = 'specie ' + str(specie) + ' (ns)')
+            plt.plot(iterations,file_abm[:,specie], label = 'specie ' + str(specie) + ' (abm)')
         plt.legend()
+    plt.title("Trend of the models with " + str(nspecie) + " species")
+    plt.xlabel("Iterations")
+    plt.ylabel("Population/Capacity")
+    plt.grid(color = 'r', linestyle = '--', alpha = 0.4)
     if setup['SAVE_PLOT'] == "true":
         plt.savefig(path_to_save  + '_comparison_' + str(nspecie) + '.png')
     else:
         plt.show()
-else:
+if setup['ENABLE_MODEL'] == "true":
     for path in path_list:
         if path == path_ns:
             model = "ns"
