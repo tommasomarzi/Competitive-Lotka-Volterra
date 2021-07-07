@@ -297,7 +297,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
                 {
                     result = -1;                    // A + A -> 0
                 }
-                else if(i == 0)                      // A + 0 -> A || move
+                else if(i == 0)                     // A + 0 -> A || move
                 {
                     int cell = random_walk(empty_cells);
                     if(cell == 9)
@@ -368,12 +368,11 @@ void LV::initializer_fill()
 
 void LV::evolve() 
 {
-    int result, shift, prev_result;
+    int result, shift;
     for (int x = 0; x < width; ++x) 
     {
 		for(int y = 0; y < height; ++y) 
         {
-            prev_result = grid[x][y];
             result = neighborhood(x, y);
             if((int(values_zero.size()) + 1) > result)
             {
@@ -381,35 +380,35 @@ void LV::evolve()
             }
             else 
             {
-                grid[x][y] = -1;
                 shift = result - (int(values_zero.size()) + 1);
                 switch(shift)
                 {
                     case 0: 
-                        grid[nb_x[0]][nb_y[0]] = prev_result;
+                        grid[nb_x[0]][nb_y[0]] = grid[x][y];
                         break;
                     case 1: 
-                        grid[nb_x[0]][nb_y[1]] = prev_result;
+                        grid[nb_x[0]][nb_y[1]] = grid[x][y];
                         break;
                     case 2: 
-                        grid[nb_x[0]][nb_y[2]] = prev_result;
+                        grid[nb_x[0]][nb_y[2]] = grid[x][y];
                         break;
                     case 3: 
-                        grid[nb_x[1]][nb_y[0]] = prev_result;
+                        grid[nb_x[1]][nb_y[0]] = grid[x][y];
                         break;
                     case 4: 
-                        grid[nb_x[1]][nb_y[2]] = prev_result;
+                        grid[nb_x[1]][nb_y[2]] = grid[x][y];
                         break;
                     case 5: 
-                        grid[nb_x[2]][nb_y[0]] = prev_result;
+                        grid[nb_x[2]][nb_y[0]] = grid[x][y];
                         break;
                     case 6: 
-                        grid[nb_x[2]][nb_y[1]] = prev_result;
+                        grid[nb_x[2]][nb_y[1]] = grid[x][y];
                         break;
                     case 7: 
-                        grid[nb_x[2]][nb_y[2]] = prev_result;
+                        grid[nb_x[2]][nb_y[2]] = grid[x][y];
                         break;
                 }
+                grid[x][y] = -1;
             }
             ++iter;
             if(ENABLE_OUTPUT)
