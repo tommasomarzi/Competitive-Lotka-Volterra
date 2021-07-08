@@ -1,4 +1,7 @@
 *.pdf
 *.png
 */a.out
+2-species-LV/
 analysis.txt
+output_ns.txt
+output_abm.txt
