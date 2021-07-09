@@ -69,6 +69,6 @@ void keypress(unsigned char key, int x, int y)
             pause = !pause;
         	break;
 		case 'i':
-			std::cout<<"Iteration: "<<simulation->get_iter()<<"/"<<ITER_MAX<<std::endl;
+			cout<<"Iteration: "<<simulation->get_iter()<<"/"<<ITER_MAX<<endl;
     } 
 }

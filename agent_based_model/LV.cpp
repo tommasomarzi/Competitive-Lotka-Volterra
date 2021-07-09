@@ -30,7 +30,7 @@ LV::LV(const int width_, const int height_): width(width_), height(height_)
 
     if((values_zero.size() + 1) > n_colors)
     {
-        std::cout<<"Color palette error: colors are not enough for the number of species."<<std::endl;
+        cout<<"Color palette error: colors are not enough for the number of species."<<endl;
         exit(1);
     }
 
@@ -67,57 +67,57 @@ LV::~LV()
 
 void LV::configuration()
 {
-    std::cout<<std::endl;
-    std::cout<<"::--------------------------- COMPETITIVE LOTKA-VOLTERRA ---------------------------:: "<<std::endl<<std::endl<<std::endl;
-    std::cout<<":: BACKGROUND:                              ( "<<n_rows<<" x "<<n_cols<<" ) cells (GREEN)"<<std::endl<<std::endl;
-    std::cout<<":: NUMBER OF SPECIES:                         "<<values_zero.size()<<std::endl<<std::endl;
-    std::cout<<":: COLORS:                                  ( ";
+    cout<<endl;
+    cout<<"::--------------------------- COMPETITIVE LOTKA-VOLTERRA ---------------------------:: "<<endl<<endl<<endl;
+    cout<<":: BACKGROUND:                              ( "<<n_rows<<" x "<<n_cols<<" ) cells (GREEN)"<<endl<<endl;
+    cout<<":: NUMBER OF SPECIES:                         "<<values_zero.size()<<endl<<endl;
+    cout<<":: COLORS:                                  ( ";
     for(int i = 0; i < values_zero.size(); i++)
     {
         switch (i) 
         {
-            case 0: std::cout<<"SENAPE"; break;
-            case 1: std::cout<<","<<'\t'<<"BLACK"; break;
-            case 2: std::cout<<","<<'\t'<<"RED"; break;
-            case 3: std::cout<<","<<'\t'<<"BLUE"; break;
-            case 4: std::cout<<","<<'\t'<<"LIGHT GRAY"; break;
-            case 5: std::cout<<","<<'\t'<<"CYAN"; break;
-            case 6: std::cout<<","<<'\t'<<"PURPLE"; break;
+            case 0: cout<<"SENAPE"; break;
+            case 1: cout<<","<<'\t'<<"BLACK"; break;
+            case 2: cout<<","<<'\t'<<"RED"; break;
+            case 3: cout<<","<<'\t'<<"BLUE"; break;
+            case 4: cout<<","<<'\t'<<"LIGHT GRAY"; break;
+            case 5: cout<<","<<'\t'<<"CYAN"; break;
+            case 6: cout<<","<<'\t'<<"PURPLE"; break;
         }
     }
-    std::cout<<" )"<<std::endl<<std::endl;
-    std::cout<<":: INITIAL VALUES (not normalized):         ( ";
+    cout<<" )"<<endl<<endl;
+    cout<<":: INITIAL VALUES (not normalized):         ( ";
     for(int i = 0; i < (values_zero.size() - 1); i++)
     {
-        std::cout<<values_zero[i]<<","<<'\t';
+        cout<<values_zero[i]<<","<<'\t';
     }
-    std::cout<<values_zero[values_zero.size() - 1]<<" )"<<std::endl<<std::endl;
-    std::cout<<":: CARRYING CAPACITIES:                     ( ";
+    cout<<values_zero[values_zero.size() - 1]<<" )"<<endl<<endl;
+    cout<<":: CARRYING CAPACITIES:                     ( ";
     for(int i = 0; i < (capacity.size() - 1); i++)
     {
-        std::cout<<capacity[i]<<","<<'\t';
+        cout<<capacity[i]<<","<<'\t';
     }
-    std::cout<<capacity[capacity.size() - 1]<<" )"<<std::endl<<std::endl;
-    std::cout<<":: RATES (not normalized):                  ( ";
+    cout<<capacity[capacity.size() - 1]<<" )"<<endl<<endl;
+    cout<<":: RATES (not normalized):                  ( ";
     for(int i = 0; i < (rates.size() - 1); i++)
     {
-        std::cout<<rates[i]<<","<<'\t';
+        cout<<rates[i]<<","<<'\t';
     }
-    std::cout<<rates[rates.size() - 1]<<" )"<<std::endl<<std::endl;
-    std::cout<<":: INTERACTION MATRIX (not normalized):       ";
+    cout<<rates[rates.size() - 1]<<" )"<<endl<<endl;
+    cout<<":: INTERACTION MATRIX (not normalized):       ";
     for (auto row : interaction) 
     {
         for (auto el : row) 
         {
             cout<<el<<","<<'\t';
         }
-        cout<<std::endl;
-        std::cout<<"                                              ";
+        cout<<endl;
+        cout<<"                                              ";
     }
-    std::cout<<std::endl<<std::endl;
+    cout<<endl<<endl;
     if(ENABLE_GRAPHICS)
     {
-        std::cout<<"Press 'p' to pause/resume, 'i' to stamp the current iteration, 'e' to exit."<<std::endl<<std::endl;
+        cout<<"Press 'p' to pause/resume, 'i' to stamp the current iteration, 'e' to exit."<<endl<<endl;
     }
 }
 
@@ -444,7 +444,7 @@ void LV::print_output()
     {   
         to_plot<<species[i]/(capacity[i])<< ' ';
     }
-    to_plot<<std::endl;
+    to_plot<<endl;
 }
 
 

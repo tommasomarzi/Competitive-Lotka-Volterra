@@ -2,3 +2,5 @@
 *.png
 */a.out
 analysis.txt
+output_ns.txt
+output_abm.txt
