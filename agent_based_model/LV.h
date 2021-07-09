@@ -1,21 +1,20 @@
 #ifndef LV_H
 #define LV_H
 
-#include <cstdlib>
 #include <ctime>
 #include "../utilities/setup.h"
+#include "../utilities/reader.cpp"
 
 class LV 
 {
 private:
+	int width;
+	int height;
+    
     int **grid;
-    int **next_grid;
     
     int *nb_x;
     int *nb_y;
-    
-	int width;
-	int height;
 
     int iter;
 

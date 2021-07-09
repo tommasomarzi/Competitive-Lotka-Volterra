@@ -16,7 +16,7 @@ void reshape(int width, int height)
 	glViewport(0, 0, w_width, w_height);          //transformation from device coords to window coords
 	glMatrixMode(GL_PROJECTION);                  // Select The Projection Matrix
 	glLoadIdentity();                             // Reset  The Projection Matrix
-	gluOrtho2D(left, right, down, up);            //corners
+	gluOrtho2D(w_left, w_right, w_down, w_up);    //corners
 	glMatrixMode(GL_MODELVIEW);                   // Select The Modelview Matrix
 	glLoadIdentity();                             // Reset  The Modelview Matrix
 	glutPostRedisplay();                          //marks the current window as needing to be redisplayed
@@ -26,8 +26,8 @@ void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   // Clear  The Screen And The Depth Buffer
 	glLoadIdentity();                                     // Reset  The View
-  	double x_scale = (right - left) / n_rows;
-	double y_scale = (up - down) / n_cols;
+  	double x_scale = (w_right - w_left) / n_rows;
+	double y_scale = (w_up - w_down) / n_cols;
 	float* specie;
 	glBegin(GL_QUADS);                                    //delimit the vertices of a primitive (vertex stream)
 	for (int x = 0; x < n_rows; ++x) 
@@ -36,10 +36,10 @@ void display(void)
 		{
             specie = simulation->get_specie_color(x, y);
 			glColor3f(specie[0],specie[1],specie[2]);
-			glVertex2f(    x*x_scale + left,    y*y_scale + down);
-			glVertex2f((x+1)*x_scale + left,    y*y_scale + down);
-			glVertex2f((x+1)*x_scale + left,(y+1)*y_scale + down);
-			glVertex2f(    x*x_scale + left,(y+1)*y_scale + down);
+			glVertex2f(w_left + x_scale*x,     w_down + y_scale*y);
+			glVertex2f(w_left + x_scale*(x+1), w_down + y_scale*y);
+			glVertex2f(w_left + x_scale*(x+1), w_down + y_scale*(y+1));
+			glVertex2f(w_left + x_scale*x,     w_down + y_scale*(y+1));
 		}
 	}
 	glEnd();

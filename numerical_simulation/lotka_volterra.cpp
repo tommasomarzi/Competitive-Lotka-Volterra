@@ -1,20 +1,8 @@
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <sstream>
-#include <string>
-#include <cstring>
-#include <fstream>
-#include <stdlib.h>
-#include "../utilities/reader.cpp"
+#include "lotka_volterra.h"
 #include "../utilities/setup.h"
 
-using namespace std;
-
-
-double h = 0.001;
-double h_half = h/2;
-double h_six = h/6;
+double h_half = h_increment/2;
+double h_six = h_increment/6;
 
 
 vector<double> VectorTimesScalar(vector<double> v, double k)
@@ -68,14 +56,13 @@ vector<double> runge_kutta(vector<double> values, vector<double> rate, vector<ve
         tmp1.push_back(lotka_volterra(i, tmp2, rate[i], interaction[i]));       //f(z,t) 
 
     fields.push_back(tmp1);  
-    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h));                 //w
+    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_increment));       //w
     tmp1.clear();
 
     for(i = 0; i < values.size(); i++)
         tmp1.push_back(lotka_volterra(i, tmp2, rate[i], interaction[i]));       //f(w,t) 
     fields.push_back(tmp1);  
     
-
     fields[1] = VectorTimesScalar(fields[1], 2);
     fields[2] = VectorTimesScalar(fields[2], 2);
     fields[0] = VectorPlusVector(fields[0], fields[1]);
@@ -85,55 +72,4 @@ vector<double> runge_kutta(vector<double> values, vector<double> rate, vector<ve
 
     result = VectorPlusVector(values, fields[0]);
     return result;
-}
-
-
-int main()
-{
-    ofstream toplot;
-    vector<vector<double>> interaction;
-    vector<double> values_zero, values, rates;
-    if(ENABLE_OUTPUT)
-    {
-        toplot.open("data/" + string(folder) + "/output_ns.txt");
-    }
-    MatrixReader(interaction, "data/" + string(folder) + "/matrix.txt");
-    VectorReader(values_zero, "data/" + string(folder) + "/values.txt");
-    VectorReader(rates,       "data/" + string(folder) + "/rates.txt");
-    /*
-    cout<<"hol"<<endl;
-    for (auto el : values_zero)  cout <<el<<" a ";
-    cout<<endl;
-    for (auto el : rates)  cout <<el<< ' ';
-    cout<<endl;
-    for (auto row : interaction) {
-    for (auto el : row) {
-        cout << el << ' ';
-    }
-    cout << "\n";
-    }
-    */
-    for ( int n = 0; n < ITER_MAX; ++n)	
-    {
-    	values = runge_kutta(values_zero, rates, interaction);    
-        values_zero = values;
-        if(ENABLE_OUTPUT)
-        {
-            for (auto el : values)  
-            {
-                toplot <<el<< ' ';
-            }
-            toplot<<endl;
-        }
-    }
-    if(ENABLE_OUTPUT)
-    {
-        toplot.close();
-    }
-
-    if(ENABLE_PLOT)
-    {
-        system("/usr/bin/python3 utilities/plotter.py");
-    }
-
 }

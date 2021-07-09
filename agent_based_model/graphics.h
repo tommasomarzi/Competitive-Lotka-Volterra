@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "LV.h"
+#include "LV.cpp"
 #include <GL/gl.h>
 #include <GL/glut.h>
 

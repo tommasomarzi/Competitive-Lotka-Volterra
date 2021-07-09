@@ -1,4 +1,6 @@
 #include "reader.h"
+#include <sstream>
+#include <fstream>
 
 void MatrixReader(vector<vector<double>> &interaction, string filename)
 {

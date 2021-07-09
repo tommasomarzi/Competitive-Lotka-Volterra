@@ -1,13 +1,14 @@
 #include "LV.h"
+#include <iostream>
+#include <stdlib.h>
 
-LV::LV(const int w, const int h): width(w), height(h) 
+LV::LV(const int width_, const int height_): width(width_), height(height_) 
 {
     grid = new int*[width];
-    next_grid = new int*[width];
+    
     for (int i = 0; i < width; ++i)
     {
         grid[i] = new int[height];
-        next_grid[i] = new int[height];
     }
     
     nb_x = new int[3];
@@ -53,10 +54,8 @@ LV::~LV()
     for(int i = 0; i < width; i++) 
     {
         delete [] grid[i];
-        delete [] next_grid[i];
     } 
     delete [] grid;
-    delete [] next_grid;
     delete [] nb_x;
     delete [] nb_y; 
     for(int i = 0; i < values_zero.size(); i++)
