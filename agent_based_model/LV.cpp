@@ -368,61 +368,57 @@ void LV::initializer_fill()
 void LV::evolve() 
 {
     int result, shift;
-    for (int x = 0; x < width; ++x) 
+    int x = rand() % n_rows;
+    int y = rand() % n_cols;
+    result = neighborhood(x, y);
+    if((int(values_zero.size()) + 1) > result)
     {
-		for(int y = 0; y < height; ++y) 
+        grid[x][y] = result;
+    }
+    else 
+    {
+        shift = result - (int(values_zero.size()) + 1);
+        switch(shift)
         {
-            result = neighborhood(x, y);
-            if((int(values_zero.size()) + 1) > result)
-            {
-                grid[x][y] = result;
-            }
-            else 
-            {
-                shift = result - (int(values_zero.size()) + 1);
-                switch(shift)
-                {
-                    case 0: 
-                        grid[nb_x[0]][nb_y[0]] = grid[x][y];
-                        break;
-                    case 1: 
-                        grid[nb_x[0]][nb_y[1]] = grid[x][y];
-                        break;
-                    case 2: 
-                        grid[nb_x[0]][nb_y[2]] = grid[x][y];
-                        break;
-                    case 3: 
-                        grid[nb_x[1]][nb_y[0]] = grid[x][y];
-                        break;
-                    case 4: 
-                        grid[nb_x[1]][nb_y[2]] = grid[x][y];
-                        break;
-                    case 5: 
-                        grid[nb_x[2]][nb_y[0]] = grid[x][y];
-                        break;
-                    case 6: 
-                        grid[nb_x[2]][nb_y[1]] = grid[x][y];
-                        break;
-                    case 7: 
-                        grid[nb_x[2]][nb_y[2]] = grid[x][y];
-                        break;
-                }
-                grid[x][y] = -1;
-            }
-            ++iter;
-            if(ENABLE_OUTPUT)
-            {
-                print_output();
-            }
-            if(iter == ITER_MAX)
-            {
-                if(ENABLE_OUTPUT)
-                {
-                    to_plot.close();
-                }
-                exit(0);
-            }
+            case 0: 
+                grid[nb_x[0]][nb_y[0]] = grid[x][y];
+                break;
+            case 1: 
+                grid[nb_x[0]][nb_y[1]] = grid[x][y];
+                break;
+            case 2: 
+                grid[nb_x[0]][nb_y[2]] = grid[x][y];
+                break;
+            case 3: 
+                grid[nb_x[1]][nb_y[0]] = grid[x][y];
+                break;
+            case 4: 
+                grid[nb_x[1]][nb_y[2]] = grid[x][y];
+                break;
+            case 5: 
+                grid[nb_x[2]][nb_y[0]] = grid[x][y];
+                break;
+            case 6: 
+                grid[nb_x[2]][nb_y[1]] = grid[x][y];
+                break;
+            case 7: 
+                grid[nb_x[2]][nb_y[2]] = grid[x][y];
+                break;
         }
+        grid[x][y] = -1;
+    }
+    ++iter;
+    if(ENABLE_OUTPUT)
+    {
+        print_output();
+    }
+    if(iter == ITER_MAX)
+    {
+        if(ENABLE_OUTPUT)
+        {
+            to_plot.close();
+        }
+        exit(0);
     }
 }
 
