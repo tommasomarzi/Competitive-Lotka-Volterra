@@ -1,15 +1,3 @@
-#include <iostream>
-#include <GL/gl.h>
-#include <GL/glut.h>
-#include <cmath>
-#include <vector>
-#include <functional>
-#include <sstream>
-#include <string>
-#include <fstream>
-#include <stdlib.h>
-#include "../utilities/reader.cpp"
-#include "LV.cpp"
 #include "graphics.cpp"
 
 LV *simulation;

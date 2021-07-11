@@ -3,9 +3,6 @@ import matplotlib.pyplot as plt
 import re
 from mpl_toolkits.mplot3d import Axes3D
 
-def log_growth(t):
-    return 1/(1+ (1/0.005 -1)*np.exp(-0.0005*t*3.5))
-
 setup = {}
 with open("utilities/setup.h") as setup_file:
     for line in setup_file.readlines():
@@ -14,7 +11,11 @@ with open("utilities/setup.h") as setup_file:
             par = re.search('#define\s+([A-Za-z]\w+)\s+(.*)', line)
             if par:
                 setup[par.group(1)] = par.group(2)
-                
+
+
+def log_growth(t):
+    return 1/(1+ (1/0.005 -1)*np.exp(-setup['h_increment']*t*3.5))
+
 path_abm = "data/{}/output_abm.txt".format(setup['folder'].replace('"',''))
 path_ns  = "data/{}/output_ns.txt".format(setup['folder'].replace('"',''))
 path_list = [path_ns, path_abm]
@@ -28,23 +29,23 @@ if setup['ENABLE_COMPARISON'] == "true":
     iterations = np.arange(0, file_ns.shape[0], 1)
     
     if file_ns.ndim == 1:
-        nspecie = 1
+        n_species = 1
         plt.plot(iterations, file_ns,  label = 'numerical simulation')
         plt.plot(iterations, file_abm, label = 'agent-based model')
         plt.plot(iterations, log_growth(iterations), label = 'exact solution', marker = 'o', markersize=0.01)
         plt.legend()
     else:
-        nspecie = file_ns.shape[1]
-        for specie in range(nspecie):
-            plt.plot(iterations,file_ns[:,specie],  label = 'specie ' + str(specie) + ' (ns)')
-            plt.plot(iterations,file_abm[:,specie], label = 'specie ' + str(specie) + ' (abm)')
+        n_species = file_ns.shape[1]
+        for species in range(n_species):
+            plt.plot(iterations,file_ns[:,species],  label = 'species ' + str(species) + ' (ns)')
+            plt.plot(iterations,file_abm[:,species], label = 'species ' + str(species) + ' (abm)')
         plt.legend()
-    plt.title("Trend of the models with " + str(nspecie) + " species")
+    plt.title("Trend of the models with " + str(n_species) + " species")
     plt.xlabel("Iterations")
     plt.ylabel("Population/Capacity")
     plt.grid(color = 'r', linestyle = '--', alpha = 0.4)
     if setup['SAVE_PLOT'] == "true":
-        plt.savefig(path_to_save  + '_comparison_' + str(nspecie) + '.png')
+        plt.savefig(path_to_save  + 'comparison_' + str(n_species) + '_species.png')
     else:
         plt.show()
 if setup['ENABLE_MODEL'] == "true":
@@ -61,20 +62,20 @@ if setup['ENABLE_MODEL'] == "true":
     #----------ALL THE SPECIES vs ITERATIONS---------#
         plt.figure()
         if file_data.ndim == 1:
-            nspecie = 1
-            plt.plot(iterations, file_data, label = 'specie ' + str(nspecie))
+            n_species = 1
+            plt.plot(iterations, file_data, label = 'species ' + str(n_species))
         else:
-            nspecie = file_data.shape[1]
-            for specie in range(nspecie):
-                plt.plot(iterations,file_data[:,specie], label = 'specie ' + str(specie))
+            n_species = file_data.shape[1]
+            for species in range(n_species):
+                plt.plot(iterations,file_data[:,species], label = 'species ' + str(species))
             plt.legend()
         if setup['SAVE_PLOT'] == "true":
-            plt.savefig(path_to_save + model + '_' + str(nspecie) + '_tot.png')
+            plt.savefig(path_to_save + model + '_' + str(n_species) + '_tot.png')
         else:
             plt.show()
 
     #----------FOUR SPECIES---------#
-        if(nspecie == 4):
+        if(n_species == 4):
             fig1 = plt.figure()
             ax1 = fig1.gca(projection="3d")
             img = ax1.scatter(file_data[:, 1], file_data[:, 0], file_data[:,2], s = 2, c=file_data[:, 3], cmap=plt.viridis())
@@ -83,30 +84,30 @@ if setup['ENABLE_MODEL'] == "true":
             #ax1.set_zlim(0.4, 0) 
             ax1.view_init(10,40)
             if setup['SAVE_PLOT'] == "true":
-                plt.savefig(path_to_save + model + str(nspecie) + '_4dim.png')
+                plt.savefig(path_to_save + model + str(n_species) + '_4dim.png')
             else:
                 plt.show()
 
 
     #----------THREE SPECIES---------#
-        if nspecie == 3:
+        if n_species == 3:
             fig = plt.figure()
             ax = fig.gca(projection="3d")
             ax.plot(file_data[:, 2], file_data[:, 1], file_data[:, 0])
             plt.draw()
             if setup['SAVE_PLOT'] == "true":
-                plt.savefig(path_to_save + model + '_' + str(nspecie) + '_3dim.png')
+                plt.savefig(path_to_save + model + '_' + str(n_species) + '_3dim.png')
             else:
                 plt.show()
 
 
     #----------TWO SPECIES---------#
-        if nspecie == 2:
+        if n_species == 2:
             fig = plt.figure()
             #ax = fig.gca(projection="3d")
             plt.plot(file_data[:, 0], file_data[:, 1])
             plt.draw()
             if setup['SAVE_PLOT'] == "true":
-                plt.savefig(path_to_save + model + '_' + str(nspecie) + '_2dim.png')
+                plt.savefig(path_to_save + model + '_' + str(n_species) + '_2dim.png')
             else:
                 plt.show()

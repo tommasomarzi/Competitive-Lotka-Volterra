@@ -2,9 +2,8 @@
 #define READER_H
 
 #include <vector>
-#include <sstream>
 #include <string>
-#include <fstream>
+
 using namespace std;
 
 void MatrixReader(vector<vector<double>> &, string);

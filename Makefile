@@ -11,11 +11,11 @@ all: run clean
 run: agent numerical
 	@./agent && ./numerical
 
-agent: $(abm)/main.cpp
-	@$(CXX) $(CXXFLAGS) -o agent $(abm)/main.cpp $(FLAGS_OPENGL)
+agent: $(abm)/main_abm.cpp
+	@$(CXX) $(CXXFLAGS) -o agent $(abm)/main_abm.cpp $(FLAGS_OPENGL)
 
-numerical: $(ns)/lotka_volterra.cpp
-	@$(CXX) $(CXXFLAGS) -o numerical $(ns)/lotka_volterra.cpp 
+numerical: $(ns)/main_ns.cpp
+	@$(CXX) $(CXXFLAGS) -o numerical $(ns)/main_ns.cpp 
 
 clean:
 	@rm agent numerical
