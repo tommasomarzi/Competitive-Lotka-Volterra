@@ -15,6 +15,7 @@ LV::LV(const int rows_, const int columns_): rows(rows_), columns(columns_)
     nb_y = new int[3];
     
     iter = 0;
+    local_iter = 1;
 
     MatrixReader(interaction, "data/" + string(folder) + "/matrix.txt");
     VectorReader(values_zero, "data/" + string(folder) + "/values.txt");
@@ -190,7 +191,7 @@ int LV::filler(vector<int> presences)
         }
         else
         {
-            prob += presences[i]*rates[i - 1]/den;
+            prob += presences[i]*rates[i-1]/den;
         }
 
         if(rv < prob)
@@ -310,7 +311,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
                 }
                 else
                 {
-                    result = i - 1;                 //A + X -> 0 + X
+                    result = -1;                 //A + X -> 0 + X
                 }
                 break;
             }
@@ -407,10 +408,14 @@ void LV::evolve()
         }
         grid[x][y] = -1;
     }
-    ++iter;
-    if(ENABLE_OUTPUT)
+    if(local_iter%LOCAL_ITER == 0)
     {
-        print_output();
+        if(ENABLE_OUTPUT)
+        {
+            print_output();
+        }
+        ++iter;
+        local_iter = 0;
     }
     if(iter == ITER_MAX)
     {
@@ -420,6 +425,7 @@ void LV::evolve()
         }
         exit(0);
     }
+    ++local_iter;
 }
 
 
@@ -438,7 +444,7 @@ void LV::print_output()
     }
     for(int i = 0; i < values_zero.size(); i++)
     {   
-        to_plot<<species[i]/(capacity[i])<< ' ';
+        to_plot<<species[i]/capacity[i]<< ' ';
     }
     to_plot<<endl;
 }

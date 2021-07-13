@@ -8,7 +8,7 @@
 class LV 
 {
 private:
-	int rows, columns, iter;
+	int rows, columns, iter, local_iter;
     int **grid;
     int *nb_x, *nb_y;
 
