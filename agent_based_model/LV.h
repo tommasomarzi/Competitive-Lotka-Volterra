@@ -8,15 +8,9 @@
 class LV 
 {
 private:
-	int width;
-	int height;
-    
+	int rows, columns, iter;
     int **grid;
-    
-    int *nb_x;
-    int *nb_y;
-
-    int iter;
+    int *nb_x, *nb_y;
 
     vector<vector<double>> interaction;
     vector<double> values_zero, rates, capacity;
@@ -24,6 +18,8 @@ private:
     float **colors;
 
     ofstream to_plot;
+
+    friend class LV_Fixture;
 
     int neighborhood(const int, const int);
     int normalizer();

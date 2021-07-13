@@ -2,13 +2,13 @@
 #include <iostream>
 #include <stdlib.h>
 
-LV::LV(const int width_, const int height_): width(width_), height(height_) 
+LV::LV(const int rows_, const int columns_): rows(rows_), columns(columns_) 
 {
-    grid = new int*[width];
+    grid = new int*[rows];
     
-    for (int i = 0; i < width; ++i)
+    for (int i = 0; i < rows; ++i)
     {
-        grid[i] = new int[height];
+        grid[i] = new int[columns];
     }
     
     nb_x = new int[3];
@@ -51,7 +51,7 @@ LV::LV(const int width_, const int height_): width(width_), height(height_)
 
 LV::~LV() 
 {
-    for(int i = 0; i < width; i++) 
+    for(int i = 0; i < rows; i++) 
     {
         delete [] grid[i];
     } 
@@ -69,7 +69,7 @@ void LV::configuration()
 {
     cout<<endl;
     cout<<"::--------------------------- COMPETITIVE LOTKA-VOLTERRA ---------------------------:: "<<endl<<endl<<endl;
-    cout<<":: BACKGROUND:                              ( "<<n_rows<<" x "<<n_cols<<" ) cells (GREEN)"<<endl<<endl;
+    cout<<":: BACKGROUND:                              ( "<<rows<<" x "<<columns<<" ) cells (GREEN)"<<endl<<endl;
     cout<<":: NUMBER OF SPECIES:                         "<<values_zero.size()<<endl<<endl;
     cout<<":: COLORS:                                  ( ";
     for(int i = 0; i < values_zero.size(); i++)
@@ -134,12 +134,12 @@ int LV::neighborhood(int x, int y)
     vector<int> presences(values_zero.size() + 1, 0);
     vector<bool> empty_cells(9, false);
 
-	nb_x[0] = (x == 0 ? width - 1: x - 1);
+	nb_x[0] = (x == 0 ? rows - 1: x - 1);
 	nb_x[1] = x;
-	nb_x[2] = (x == width - 1 ? 0 : x + 1);
-	nb_y[0] = (y == 0 ? height - 1: y - 1);
+	nb_x[2] = (x == rows - 1 ? 0 : x + 1);
+	nb_y[0] = (y == 0 ? columns - 1: y - 1);
 	nb_y[1] = y;
-	nb_y[2] = (y == height - 1 ? 0 : y + 1);
+	nb_y[2] = (y == columns - 1 ? 0 : y + 1);
 
     for(int i = 0; i < 3; ++i) 
     {
@@ -206,7 +206,7 @@ int LV::filler(vector<int> presences)
 int LV::normalizer()
 {
     int result = -1;
-    int cells = n_rows*n_cols;
+    int cells = rows*columns;
     double rv = (double)rand() / RAND_MAX;
     double prob = 0.0;
     for(int i = 0; i < values_zero.size(); i++)
@@ -294,23 +294,23 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
             {
                 if((i - 1) == specie)
                 {
-                    result = -1;                    // A + A -> 0
+                    result = -1;                    // A + A -> 0 + A
                 }
-                else if(i == 0)                     // A + 0 -> A || move
+                else if(i == 0)                     // A + 0 -> move
                 {
                     int cell = random_walk(empty_cells);
                     if(cell == 9)
                     {
-                        result = specie;            // A + 0 -> A
+                        result = specie;            // A + 0 -> A + 0
                     }
                     else
                     {
-                        result = values_zero.size() + cell + 1;     // A + 0 -> move
+                        result = values_zero.size() + cell + 1;     // A + 0 -> 0 + A
                     }
                 }
                 else
                 {
-                    result = i - 1;                 //A + X -> X
+                    result = i - 1;                 //A + X -> 0 + X
                 }
                 break;
             }
@@ -355,9 +355,9 @@ int LV::random_walk(vector<bool> empty_cells)
 
 void LV::initializer_fill() 
 {      
-	for(int i = 0; i < width; ++i)
+	for(int i = 0; i < rows; ++i)
     {
-		for(int j = 0; j < height; ++j) 
+		for(int j = 0; j < columns; ++j) 
         {
             grid[i][j] = normalizer();
 		}
@@ -368,8 +368,8 @@ void LV::initializer_fill()
 void LV::evolve() 
 {
     int result, shift;
-    int x = rand() % n_rows;
-    int y = rand() % n_cols;
+    int x = rand() % rows;
+    int y = rand() % columns;
     result = neighborhood(x, y);
     if((int(values_zero.size()) + 1) > result)
     {
@@ -426,9 +426,9 @@ void LV::evolve()
 void LV::print_output()
 {
     double species[values_zero.size()] = {0};
-    for(int x = 0; x < n_rows; x++)
+    for(int x = 0; x < rows; x++)
     {
-        for(int y = 0; y < n_cols; y++)
+        for(int y = 0; y < columns; y++)
         {
             if(grid[x][y] != -1)
             {

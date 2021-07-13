@@ -1,0 +1,20 @@
+CXX=g++
+CXXFLAGS += -std=c++11
+
+dir = testing
+abm = agent_based_model
+
+all: run clean
+.PHONY: all
+
+run: abm_test ns_test
+	@./abm_test && ./ns_test
+
+abm_test: $(dir)/abm_test.cpp
+	@$(CXX) $(CXXFLAGS) $(dir)/main_test.o $(dir)/abm_test.cpp -o abm_test
+
+ns_test: $(dir)/ns_test.cpp
+	@$(CXX) $(CXXFLAGS) $(dir)/main_test.o $(dir)/ns_test.cpp -o ns_test
+
+clean:
+	@rm abm_test ns_test
