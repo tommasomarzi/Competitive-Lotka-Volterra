@@ -14,7 +14,7 @@ with open("utilities/setup.h") as setup_file:
 
 
 def log_growth(t):
-    return 1/(1+ (1/0.005 -1)*np.exp(-setup['h_increment']*t*3.5))
+    return 1/(1+ (1/0.05 -1)*np.exp(-float(setup['h_increment'])*t*3.5))
 
 path_abm = "data/{}/output_abm.txt".format(setup['folder'].replace('"',''))
 path_ns  = "data/{}/output_ns.txt".format(setup['folder'].replace('"',''))
@@ -23,29 +23,32 @@ path_list = [path_ns, path_abm]
 path_to_save = "output/figure_"
 
 if setup['ENABLE_COMPARISON'] == "true":
-    plt.figure()
+    plt.figure(figsize=(8, 6))
     file_ns  = np.loadtxt(path_ns)
     file_abm = np.loadtxt(path_abm)
     iterations = np.arange(0, file_ns.shape[0], 1)
     
     if file_ns.ndim == 1:
         n_species = 1
-        plt.plot(iterations, file_ns,  label = 'numerical simulation')
         plt.plot(iterations, file_abm, label = 'agent-based model')
-        plt.plot(iterations, log_growth(iterations), label = 'exact solution', marker = 'o', markersize=0.01)
-        plt.legend()
+        plt.plot(iterations, file_ns,  label = 'numerical simulation')
+        #plt.plot(iterations, log_growth(iterations), label = 'exact solution', marker = 'o', markersize=0.01)
     else:
         n_species = file_ns.shape[1]
         for species in range(n_species):
-            plt.plot(iterations,file_ns[:,species],  label = 'species ' + str(species) + ' (ns)')
-            plt.plot(iterations,file_abm[:,species], label = 'species ' + str(species) + ' (abm)')
-        plt.legend()
-    plt.title("Trend of the models with " + str(n_species) + " species")
-    plt.xlabel("Iterations")
-    plt.ylabel("Population/Capacity")
+            plt.plot(iterations,file_ns[:,species],  label = 'species ' + str(species + 1) + ' (ns)')
+            plt.plot(iterations,file_abm[:,species], label = 'species ' + str(species + 1) + ' (abm)')
+    plt.legend(fontsize = 15)
+    plt.tight_layout(rect=[0, 0.03, 1, 0.93])
+    #plt.title("Trend of the models with " + str(n_species) + " species", fontsize=20)
+    plt.xlabel("Iterations", fontsize=15)
+    plt.ylabel("Population/Capacity", fontsize=15)
+    plt.xticks(fontsize = 14)
+    plt.yticks(fontsize = 14)
+    plt.ylim([0,1.3])
     plt.grid(color = 'r', linestyle = '--', alpha = 0.4)
     if setup['SAVE_PLOT'] == "true":
-        plt.savefig(path_to_save  + 'comparison_' + str(n_species) + '_species.png')
+        plt.savefig(path_to_save  + 'comparison_' + str(n_species) + '_species.png',bbox_inches="tight")
     else:
         plt.show()
 if setup['ENABLE_MODEL'] == "true":
