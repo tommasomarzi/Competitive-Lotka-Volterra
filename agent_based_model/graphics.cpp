@@ -70,5 +70,9 @@ void keypress(unsigned char key, int x, int y)
         	break;
 		case 'i':
 			cout<<"Iteration: "<<simulation->get_iter()<<"/"<<ITER_MAX<<endl;
+			break;
+		case 's':
+			simulation->get_stats();
+			break;
     } 
 }
