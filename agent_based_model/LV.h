@@ -4,6 +4,7 @@
 #include <ctime>
 #include "../utilities/setup.h"
 #include "../utilities/reader.cpp"
+#include "../testing/general.cpp"
 
 class LV 
 {

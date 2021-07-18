@@ -22,6 +22,8 @@ LV::LV(const int rows_, const int columns_): rows(rows_), columns(columns_)
     VectorReader(rates,       "data/" + string(folder) + "/rates.txt");
     VectorReader(capacity,    "data/" + string(folder) + "/capacity.txt");
 
+    check_input(values_zero, interaction, rates, capacity);
+
     if(ENABLE_OUTPUT)
     {
         to_plot.open( "data/" + string(folder) + "/output_abm.txt");

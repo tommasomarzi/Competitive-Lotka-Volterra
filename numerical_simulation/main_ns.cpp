@@ -1,5 +1,6 @@
 #include "lotka_volterra.cpp"
 #include "../utilities/reader.cpp"
+#include "../testing/general.cpp"
 
 int main()
 {
@@ -14,6 +15,8 @@ int main()
     MatrixReader(interaction, "data/" + string(folder) + "/matrix.txt");
     VectorReader(values_zero, "data/" + string(folder) + "/values.txt");
     VectorReader(rates,       "data/" + string(folder) + "/rates.txt");
+
+    check_input(values_zero, interaction, rates, values_zero);
 
     for ( int n = 0; n < ITER_MAX; ++n)	
     {
@@ -39,4 +42,5 @@ int main()
         system("/usr/bin/python3 utilities/plotter.py");
     }
 
+    return 0;
 }
