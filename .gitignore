@@ -3,5 +3,6 @@
 */a.out
 2-species-LV/
 analysis.txt
-output_ns.txt
-output_abm.txt
+**/output_ns.txt
+**/output_abm.txt
+testing/catch.hpp -linguist-vendored
