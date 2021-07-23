@@ -10,16 +10,43 @@ Jump to a section:
 
 
 ## The theoretical model
-For more references on the model check the [Wikipedia page](https://en.wikipedia.org/wiki/Competitive_Lotka%E2%80%93Volterra_equations#N_species).
+The model describes the evolution of N species competing for the same resources.
+In particular, the evolution of each species *i* normalized with respect to its own carrying capacity is describes by the following first-order nonlinear differential equation:
+
+![equation1](https://latex.codecogs.com/gif.latex?\frac{dx_i}{dt}&space;=&space;r_i&space;x_i\left(1-\sum_{j&space;=&space;1}^N\alpha_{ij}x_j\right))
+
+where *r<sub>i</sub>* > 0 is the growth rate of the species *i* and *&alpha;<sub>ij</sub>* >= 0 is the element of the interaction matrix *&alpha;* which quantifies the effect of the species *j* on the species *i* (conventionally *&alpha;<sub>ii</sub>* = 1).
+The evolution of each species is bounded between 0 and 1 with respect to its own carrying capacity. 
+
+For references regarding the chaotic dynamics or attractor phenomena that this model can exhibit, check the [Wikipedia page](https://en.wikipedia.org/wiki/Competitive_Lotka%E2%80%93Volterra_equations#Possible_dynamics).
 
 
 ## The Agent-Based model
-The graphical part of the Agent-Based model is made with [OpenGL](https://www.opengl.org//). The rules are the following:
+An Agent-Based model is realized by considering a *n*x*n* grid in which the individuals move and interact according to stochastic events based on the values of the parameters of the model. The rules are the following:
 
-1. at first the grid is initialized in a probabilistic way: the probability to have an individual in a cell is given by the Hadamard (pointwise) product between the vector of the initial values and vector of the capacities divided by the total number of cells.  
+1. at the beginning, each cell of the grid is initialized with an individual belonging to a species *i* with a probability:
+
+    ![equation_start](https://latex.codecogs.com/gif.latex?p_i&space;=&space;\frac{K_i\,x_i^0}{n^2})
+
+where *K<sub>i</sub>* is the carrying capacity of the species *i* (i.e. maximum number that the population can reach).
+
 2. then for each iteration we pick a cell:
-    - if it is empty, an individual of a certain species is created with a probability given by the product between the rates and the number of individuals of each species in the eight adjacent cells (if an adjacent cell is empty the rate is one and it leads to an unoccupied cell) 
-    - if it is occupied, there is competition according to the coefficients of the interaction matrix or (if it is possible) the individual moves to an adjacent empty cell.
+    - if it is empty, an individual of a certain species is created with a probability given by:
+
+        ![equation_empty](https://latex.codecogs.com/gif.latex?p_i&space;=&space;\frac{r_i\,g_i}{Z})
+
+    where *g<sub>i</sub>* is the occupation number in the eight-cells neighborhood and *Z* is a normalization constant (the rate associated to the empty cells *r<sub>0</sub>* is fixed to one and it leaves the cell unoccupied).
+
+    - if it is occupied, it interact with one kind of the neighborhood cells according to the occupation number:
+    
+        ![equation_int](https://latex.codecogs.com/gif.latex?p_j&space;=&space;\frac{g_j}{8})
+
+    If *j* = 0 then the individual can move to an empty cell (or it stays in the current one) with a uniform probability.
+    If *j* = 1, ..., N then the individual in the considered cell dies with a probability *&alpha;<sub>ij</sub>*. Therefore, we require that *&alpha;<sub>ij</sub>* <= 1.
+
+The simulation evolves up to the chosen number of iterations.
+
+The graphical part of the Agent-Based model is made with [OpenGL](https://www.opengl.org//).
 
 
 ## Structure of the code:
