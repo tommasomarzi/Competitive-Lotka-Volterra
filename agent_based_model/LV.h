@@ -24,7 +24,6 @@ private:
 
     int neighborhood(const int, const int);
     int normalizer();
-    int normalizer(vector<int>);
     int normalizer(vector<int>, vector<bool>, int);
     int random_walk(vector<bool>, int);
     int filler(vector<int>);

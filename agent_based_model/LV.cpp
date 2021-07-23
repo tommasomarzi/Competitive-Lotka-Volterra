@@ -230,37 +230,6 @@ int LV::normalizer()
 }
 
 
-int LV::normalizer(vector<int> presences)
-{
-    int result;
-    double den = 0.0;
-    double rv = (double)rand() / RAND_MAX;
-    double prob = 0.0;
-    vector<double> rates_neighborhood;
-
-    for(int i = 0; i < presences.size(); i++)  
-    {
-        rates_neighborhood.push_back(rates[i]*presences[i]);
-    }
-
-    for(int i = 0; i < rates_neighborhood.size(); i++)  
-    {
-        den += rates_neighborhood[i];
-    }
-
-    for(int i = 0; i < rates_neighborhood.size(); i++)
-    {
-        prob += rates_neighborhood[i]/den;
-        if(rv < prob)
-        {
-            result = i;
-            break;
-        }
-    }
-    return result;
-}
-
-
 int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
 {    
     int result;
