@@ -12,27 +12,22 @@ with open("utilities/setup.h") as setup_file:
             if par:
                 setup[par.group(1)] = par.group(2)
 
-
-def log_growth(t):
-    return 1/(1+ (1/0.05 -1)*np.exp(-float(setup['h_increment'])*t*3.5))
-
 path_abm = "data/{}/output_abm.txt".format(setup['folder'].replace('"',''))
 path_ns  = "data/{}/output_ns.txt".format(setup['folder'].replace('"',''))
-path_list = [path_ns, path_abm]
 
 path_to_save = "output/figure_"
 
-if setup['ENABLE_COMPARISON'] == "true":
-    plt.figure(figsize=(8, 6))
+#Comparison of the trends of the two models versus the iterations
+def models_vs_iter():
     file_ns  = np.loadtxt(path_ns)
     file_abm = np.loadtxt(path_abm)
     iterations = np.arange(0, file_ns.shape[0], 1)
-    
+    plt.figure(figsize=(8, 6))
+
     if file_ns.ndim == 1:
         n_species = 1
         plt.plot(iterations, file_abm, label = 'agent-based model')
         plt.plot(iterations, file_ns,  label = 'numerical simulation')
-        #plt.plot(iterations, log_growth(iterations), label = 'exact solution', marker = 'o', markersize=0.01)
     else:
         n_species = file_ns.shape[1]
         for species in range(n_species):
@@ -40,7 +35,6 @@ if setup['ENABLE_COMPARISON'] == "true":
             plt.plot(iterations,file_abm[:,species], label = 'species ' + str(species + 1) + ' (abm)')
     plt.legend(fontsize = 15)
     plt.tight_layout(rect=[0, 0.03, 1, 0.93])
-    #plt.title("Trend of the models with " + str(n_species) + " species", fontsize=20)
     plt.xlabel("Iterations", fontsize=15)
     plt.ylabel("Population/Capacity", fontsize=15)
     plt.xticks(fontsize = 14)
@@ -51,66 +45,93 @@ if setup['ENABLE_COMPARISON'] == "true":
         plt.savefig(path_to_save  + 'comparison_' + str(n_species) + '_species.png',bbox_inches="tight")
     else:
         plt.show()
-if setup['ENABLE_MODEL'] == "true":
+
+
+#x1 vs x2
+def two_species(file_data, model):
+    iterations = np.arange(0, file_data.shape[0], 1) 
+    fig = plt.figure()
+    plt.plot(file_data[:, 0], file_data[:, 1])
+    plt.xlabel('$x_1$', fontsize = 15)
+    plt.ylabel('$x_2$', fontsize = 15)
+    plt.xticks(fontsize = 14)
+    plt.yticks(fontsize = 14)
+    plt.xlim([0,1])
+    plt.ylim([0,1])
+    plt.grid(color = 'r', linestyle = '--', alpha = 0.4) 
+    plt.draw()
+    if setup['SAVE_PLOT'] == "true":
+        plt.savefig(path_to_save + model + '_2dim.png')
+    else:
+        plt.show() 
+
+
+#x1 vs x2 vs x3
+def three_species(file_data, model):
+    iterations = np.arange(0, file_data.shape[0], 1)  
+    fig = plt.figure()
+    ax = fig.gca(projection="3d")
+    ax.plot(file_data[:, 0], file_data[:, 1], file_data[:, 2])
+    ax.set_xlabel('$x_1$', fontsize = 15)
+    ax.set_ylabel('$x_2$', fontsize = 15)
+    ax.set_zlabel('$x_3$', fontsize = 15)
+    ax.zaxis.set_rotate_label(False) 
+    ax.set_xlim([0,1])
+    ax.set_ylim([0,1])
+    ax.set_zlim([0,1])
+    if setup['SAVE_PLOT'] == "true":
+        plt.savefig(path_to_save + model + '_3dim.png')
+    else:
+        plt.show() 
+
+
+#x1 vs x2 vs x3 vs x4
+def four_species(file_data, model):
+    iterations = np.arange(0, file_data.shape[0], 1)  
+    fig = plt.figure()
+    ax = fig.gca(projection="3d")
+    img = ax.scatter(file_data[:, 1], file_data[:, 0], file_data[:,2], s = 2, c=file_data[:, 3], vmin = 0, vmax = 1, cmap=plt.viridis())
+    cbar = fig.colorbar(img)
+    cbar.set_label(label = '$x_4$', rotation = 0, fontsize = 15) 
+    ax.view_init(10,40)
+    ax.set_xlabel('$x_2$', fontsize = 15)
+    ax.set_ylabel('$x_1$', fontsize = 15)
+    ax.set_zlabel('$x_3$', fontsize = 15)
+    ax.zaxis.set_rotate_label(False) 
+    ax.set_xlim([0,1])
+    ax.set_ylim([0,1])
+    ax.set_zlim([0,1])
+    if setup['SAVE_PLOT'] == "true":
+        plt.savefig(path_to_save + model + '_4dim.png')
+    else:
+        plt.show()  
+
+
+if setup['ENABLE_COMPARISON'] == "true":
+    models_vs_iter()
+
+path_list = []
+
+if setup['ENABLE_PLOT_NS'] == "true":
+    path_list.append(path_ns)
+
+if setup['ENABLE_PLOT_ABM'] == "true":
+    path_list.append(path_abm)
+
+if path_list:
     for path in path_list:
         if path == path_ns:
             model = "ns"
         else:
             model = "abm"
-        print("Starting the plots for the {} model".format(model))
 
-        file_data = np.loadtxt(path) 
-        iterations = np.arange(0, file_data.shape[0], 1)
+        file_data = np.loadtxt(path)
 
-    #----------ALL THE SPECIES vs ITERATIONS---------#
-        plt.figure()
-        if file_data.ndim == 1:
-            n_species = 1
-            plt.plot(iterations, file_data, label = 'species ' + str(n_species))
-        else:
+        if file_data.ndim > 1:
             n_species = file_data.shape[1]
-            for species in range(n_species):
-                plt.plot(iterations,file_data[:,species], label = 'species ' + str(species))
-            plt.legend()
-        if setup['SAVE_PLOT'] == "true":
-            plt.savefig(path_to_save + model + '_' + str(n_species) + '_tot.png')
-        else:
-            plt.show()
-
-    #----------FOUR SPECIES---------#
-        if(n_species == 4):
-            fig1 = plt.figure()
-            ax1 = fig1.gca(projection="3d")
-            img = ax1.scatter(file_data[:, 1], file_data[:, 0], file_data[:,2], s = 2, c=file_data[:, 3], cmap=plt.viridis())
-            fig1.colorbar(img)
-            #ax1.set_xlim(0.8, 0) 
-            #ax1.set_zlim(0.4, 0) 
-            ax1.view_init(10,40)
-            if setup['SAVE_PLOT'] == "true":
-                plt.savefig(path_to_save + model + str(n_species) + '_4dim.png')
-            else:
-                plt.show()
-
-
-    #----------THREE SPECIES---------#
-        if n_species == 3:
-            fig = plt.figure()
-            ax = fig.gca(projection="3d")
-            ax.plot(file_data[:, 2], file_data[:, 1], file_data[:, 0])
-            plt.draw()
-            if setup['SAVE_PLOT'] == "true":
-                plt.savefig(path_to_save + model + '_' + str(n_species) + '_3dim.png')
-            else:
-                plt.show()
-
-
-    #----------TWO SPECIES---------#
-        if n_species == 2:
-            fig = plt.figure()
-            #ax = fig.gca(projection="3d")
-            plt.plot(file_data[:, 0], file_data[:, 1])
-            plt.draw()
-            if setup['SAVE_PLOT'] == "true":
-                plt.savefig(path_to_save + model + '_' + str(n_species) + '_2dim.png')
-            else:
-                plt.show()
+            if n_species == 2:
+                two_species(file_data, model)
+            if n_species == 3:
+                three_species(file_data, model)
+            if n_species == 4:
+                four_species(file_data, model)
