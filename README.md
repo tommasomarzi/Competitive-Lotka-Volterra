@@ -1,5 +1,5 @@
 # **Competitive Lotka-Volterra**
-The aim of this project is to calibrate an Agent-Based model representing a competitive N-species Lotka-Volterra model with its numerical solution (performed with a Runge-Kutta 4 algorithm).
+The aim of this project is to calibrate an Agent-Based model representing a competitive N-species Lotka-Volterra model with its numerical solution (performed with a [Runge-Kutta 4 algorithm](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method)).
 
 Jump to a section:
 * [Theoretical model](#The-theoretical-model)
@@ -55,7 +55,7 @@ The code is structured in the following folders:
 - [Agent-based model](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/agent_based_model): in this folder three blocks of files are present, i.e. main_abm.cpp, which handles the glutMainLoop (if the graphical part is enabled), graphics.cpp/h in which the rules concerning the graphical part are defined, and LV.cpp/h, in which the dynamics of the agent-based model is specified.
 - [Testing](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing): in this folder (still under development) the main functions of the program are tested.
 - [Utilites](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/utilities): this folder contains several files that are required both for the numerical simulation and the agent-based model. In particular, we distinguish the reader.cpp/h files, in which the functions to read the data are defined, plotter.py, which handles the visualization of the trends, and utilities.h, which contains the parameter for the simulation.
-- [Data](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data): this folder contains some examples of data regarding the dynamics of the model (growth rates, initial conditions, interaction matrix and carrying capacities) with different number of species.
+- [Data](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data): this folder contains some examples of data regarding the dynamics of the model (growth rates in rates.txt, initial conditions in values.txt, interaction matrix in matrix.txt and carrying capacities in capacity.txt) with different number of species.
 - [Output](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/output): this folder will contain the plots if SAVE_PLOT in utilies.h is set to true.
 
 
@@ -73,6 +73,7 @@ sudo apt-get install binutils-gold
 ```
 
 ### Python
+At the moment to run the program the python3 version is required (looking for a way to remove this dependence).
 For the python script the following libraries are required:
 
 - numpy
@@ -80,7 +81,7 @@ For the python script the following libraries are required:
 
 If they are not already installed, type:
 ```bash
-pip install numpy matplotlib
+pip3 install numpy matplotlib
 ```
 
 
@@ -95,9 +96,13 @@ cd Competitive-Lotka-Volterra
 ```
 
 ### Run the model
-Once the configuration in the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) file has been chosen, in order to build and run the simulation type (the flag '-s' silences the output of make, but it is not strictly necessary):
+Once the configuration in the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) file has been chosen (**please refer to the [setup_usage file](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/docs/setup_usage.md)**), in order to build and run the simulation type (the flag '-s' silences the output of make, but it is not strictly necessary):
 ```bash
 make model -s
+```
+Once the simulation has been performed, the output files of the two models can be found in the folder with the parameters chosen in setup.h. If you want to run the plots directly from those files, type:
+```bash
+/usr/bin/python3 utilities/plotter.py
 ```
 
 ### Testing
