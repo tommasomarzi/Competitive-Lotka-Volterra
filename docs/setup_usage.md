@@ -40,6 +40,7 @@ If this event does not occur, the individual can move according to an uniform pr
 * **w_right, w_left, w_up, w_down**:    corners of the orthographic viewing region (**not recommended to change**).
 * **fps**:                              frame per second, i.e. the time (measured in *s<sup>-1</sup>*) to refresh and update the window of the graphical part.
 * **folder**:                           name of the folder in the [data folder](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data) which contains the required parameters (rates.txt, values.txt, matrix.txt and capacity.txt) and that will contain the output files (output_ns.txt and output_abm.txt).
+* **N_SIM_TEST**:                       number of times that the agent-based model methods are tested.                     
 * **DEBUG_MODE**:                       if it is true, it will fix the seed of the random number generator to a constant value.
 * **ENABLE_GRAPHICS**:                  if it is true, it will display the evolution of the agent-based model.
 * **ENABLE_OUTPUT**:                    if it is true, it will compute and save the output of the evolution of the species in the models. 

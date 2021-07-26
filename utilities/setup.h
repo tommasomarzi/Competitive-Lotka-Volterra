@@ -15,6 +15,7 @@
 #define w_down                  0.0
 #define fps                     1000
 #define folder                  "4-species"
+#define N_SIM_TEST              10
 #define DEBUG_MODE              false
 #define ENABLE_GRAPHICS         false
 #define ENABLE_OUTPUT           true

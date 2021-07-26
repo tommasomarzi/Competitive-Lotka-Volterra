@@ -3,27 +3,36 @@
 void check_input(vector<double> values, vector<vector<double>> interaction, vector<double> rates, vector<double> capacity)
 {
     int n_species = values.size();
+    if(n_species == 0)
+    {
+        cout<<"INPUT ERROR: please check the input file or its path (0 species found). Aborted."<<endl;
+        exit(1);
+    }
     if(interaction.size() != n_species)
     {
-        cout<<"INPUT ERROR: interaction matrix has an incorrect size. Aborted."<<endl;
+        cout<<"INPUT ERROR: the interaction matrix has a different size ("<<interaction.size();
+        cout<<") from the vector of the initial conditions ("<<n_species<<"). Aborted."<<endl;
         exit(1);
     }
     for(int i = 0; i < interaction.size(); i++)
     {
         if(interaction[i].size() != n_species)
         {
-            cout<<"INPUT ERROR: interaction matrix has an incorrect size. Aborted."<<endl;
+            cout<<"INPUT ERROR: the row "<<i<<" of interaction matrix has a different size ("<<interaction[i].size();
+            cout<<") from the vector of the initial conditions ("<<n_species<<"). Aborted."<<endl;
             exit(1);
         }
     }
     if(rates.size() != n_species)
     {
-        cout<<"INPUT ERROR: rates vector has an incorrect size. Aborted."<<endl;
+        cout<<"INPUT ERROR: the growth rates vector has a different size ("<<rates.size();
+        cout<<") from the vector of the initial conditions ("<<n_species<<"). Aborted."<<endl;
         exit(1);
     }
     if(capacity.size() != n_species)
     {
-        cout<<"INPUT ERROR: capacity vector has an incorrect size. Aborted."<<endl;
+        cout<<"INPUT ERROR: the capacities vector has a different size ("<<capacity.size();
+        cout<<") from the vector of the initial conditions ("<<n_species<<"). Aborted."<<endl;
         exit(1);
     }
 }

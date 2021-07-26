@@ -7,9 +7,12 @@ SCENARIO("Vector operations","[vector]")
 {
     GIVEN("a vector with a certain shape and a scalar value")
     {
-        std::vector<double> initial_vec(10,20);
-        std::vector<double> result_prod;
-        double scalar = 1.2;
+        int size = (rand() % 10) + 1;
+        double value = (double)rand() / RAND_MAX;
+        vector<double> initial_vec(size,value);
+        double scalar = (double)rand() / RAND_MAX;
+        vector<double> result_prod;
+
         WHEN("the vector is multiplied by the scalar")
         {
             result_prod = VectorTimesScalar(initial_vec, scalar);
@@ -25,7 +28,7 @@ SCENARIO("Vector operations","[vector]")
         }
         WHEN("the vector is added to itself")
         {
-            std::vector<double> result_sum;
+            vector<double> result_sum;
             result_sum = VectorPlusVector(initial_vec, initial_vec);
             THEN("the resulting vector has the same shape and its values are the result of the sum")
             {

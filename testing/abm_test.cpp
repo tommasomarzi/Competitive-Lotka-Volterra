@@ -94,62 +94,105 @@ class LV_Fixture
 
 
 TEST_CASE_METHOD(LV_Fixture, "Test LV class methods") 
-{   
-    int result;
-    int x = rand() % row;
-    int y = rand() % col;
+{
+    int result;   
+    int x;
+    int y;
     bool check;
 
-    //LV::neighborhood(int,int)
-    result = test_neighborhood(x,y);
-    REQUIRE(result > -2);
-    REQUIRE(result < n_species);
-    
-    //LV::normalizer()
-    result = test_normalizer();
-    REQUIRE(result > -2);
-    REQUIRE(result < n_species);
-
-    //LV::filler(vector<int>)
-    vector<int> presences = pres_fill();
-    result = test_filler(presences);
-    check = false;
-    for(int i = 0; i < presences.size(); i++)
+    for(int n_sim = 0; n_sim < N_SIM_TEST; n_sim++)
     {
-        if(presences[i] == 0)
+        //LV::neighborhood(int,int)
+        x = rand() % row;
+        y = rand() % col;
+        result = test_neighborhood(x,y);
+        REQUIRE(result > -2);
+        REQUIRE(result < n_species);
+
+
+        //LV::normalizer()
+        result = test_normalizer();
+        REQUIRE(result > -2);
+        REQUIRE(result < n_species);
+
+
+        //LV::filler(vector<int>)
+        vector<int> presences = pres_fill();
+        result = test_filler(presences);
+        check = false;
+        for(int i = 0; i < presences.size(); i++)
         {
-            continue;
+            if(presences[i] == 0)
+            {
+                continue;
+            }
+            else if(result == (i - 1))
+            {
+                check = true;
+            }
         }
-        else if(result == (i - 1))
+        REQUIRE(result > -2);
+        REQUIRE(result < n_species);
+        REQUIRE(check == true);
+
+
+        //LV::normalizer(vector<int>, vector<bool>, int)
+        int species = rand() % n_species;
+        vector<bool> empty_cells = neighborhood_is_empty();
+        check = false;
+
+        result = test_normalizer(presences, empty_cells, species);
+        for(int i = 0; i < presences.size(); i++)
+        {
+            if(presences[i] == 0)
+            {
+                continue;
+            }
+            else if(result == (i - 1))
+            {
+                check = true;
+            }
+        }
+        if(result == species)
         {
             check = true;
         }
-    }
-    REQUIRE(result > -2);
-    REQUIRE(result < n_species);
-    REQUIRE(check == true);
+        if(check == false)
+        {
+            if((result > n_species) && (result < (n_species + 10)))
+            {
+                check = true;
+            }
+        }
+        if(ENABLE_BIRTHS)
+        {
+            if(check == false)
+            {
+                if((result > (n_species + 100)) && (result < (n_species + 110)))
+                {
+                    check = true;
+                }
+            }
+        }
+        REQUIRE(result > -2);
+        REQUIRE(check == true);
 
-    //LV::normalizer(vector<int>, vector<int>, int)
-    int species = rand() % n_species;
-    vector<bool> empty_cells = neighborhood_is_empty();
-    result = test_normalizer(presences, empty_cells, species);
-    check = false;
-    for(int i = 0; i < presences.size(); i++)
-    {
-        if(presences[i] == 0)
+
+        //LV::random_walk(vector<bool>, int)
+        int count_empty = 1;
+        for(int i = 0; i < empty_cells.size(); i++)
         {
-            continue;
+            if(empty_cells[i] == true)
+            {
+                count_empty++;
+            }
         }
-        else if(result == (i - 1))
+        result = test_random_walk(empty_cells, count_empty);
+        REQUIRE(result > -1);
+        REQUIRE(result < 10);
+        if(result != 9)
         {
-            check = true;
+            REQUIRE(empty_cells[result] == true);
         }
     }
-    if(result == species)
-    {
-        check = true;
-    }
-    REQUIRE(result > -2);
-    REQUIRE(result < n_species);
-    REQUIRE(check == true);
 }
