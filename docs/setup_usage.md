@@ -2,9 +2,16 @@
 This file aims to explain each parameter of the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) file.
 
 ## Warning
-Since at the moment I have not found a formal way to convert the parameters defined in the header file into a format usable by python, the conversion is done manually in the lines 6-13 of [plotter.py](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/plotter.py). 
+Since at the moment I have not found a formal way to convert the parameters defined in the header file into a format usable by python, the conversion into a dictionary is done in the lines 6-13 of [plotter.py](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/plotter.py). 
 
-This method works but it is extremely sensitive to extra spaces and possible comments: therefore, to ensure its proper operation it is required that there are no spaces or comments after the parameter value (i.e. each line ends with the value).
+As one can see, this method is based on regex matching. 
+Therefore, it is required not to overturn the original structure of the file in order to avoid possible conflicts with extra characters or punctuation and compromise the correct operation of the program.
+
+<!--
+## Warning
+Since at the moment I have not found a formal way to convert the parameters defined in the header file into a format usable by python, the conversion into a dictionary is done through a regex in the lines 6-13 of [plotter.py](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/plotter.py). 
+
+This method works but it is sensitive to extra spaces and possible comments: therefore, to ensure its proper operation it is required that there are no spaces or comments after the parameter value (i.e. each line ends with the value).
 
 The following examples should clear up any doubts (please select the text in the code box).
 
@@ -23,6 +30,7 @@ Another example of incorrect use:
 #define this_is             "an_incorrect_format"//this comment must be deleted! 
 #define does_it_work        false
 ```
+-->
 
 ## Explanation of the parameters
 * **ITER_MAX**:                         number of iterations of the models.

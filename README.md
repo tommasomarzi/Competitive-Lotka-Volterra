@@ -11,7 +11,7 @@ Jump to a section:
 
 ## The theoretical model
 The model describes the evolution of N species competing for the same resources.
-In particular, the evolution of each species *i* normalized with respect to its own carrying capacity is describes by the following first-order nonlinear differential equation:
+In particular, the evolution of each species *i* normalized with respect to its own carrying capacity is described by the following first-order nonlinear differential equation:
 
 ![equation1](https://latex.codecogs.com/gif.latex?\frac{dx_i}{dt}&space;=&space;r_i&space;x_i\left(1-\sum_{j&space;=&space;1}^N\alpha_{ij}x_j\right))
 
@@ -53,7 +53,7 @@ The graphical part of the Agent-Based model is made with [OpenGL](https://www.op
 The code is structured in the following folders:
 - [Numerical simulation](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/numerical_simulation): in this folder the numerical solution of the competitive Lotka-Volterra model is computed through the RK4 algorithm. In particular, main_ns.cpp handles the main loop and it calls the algorithm and the model that are present in lotka_volterra.cpp/h files.
 - [Agent-based model](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/agent_based_model): in this folder three blocks of files are present, i.e. main_abm.cpp, which handles the glutMainLoop (if the graphical part is enabled), graphics.cpp/h in which the rules concerning the graphical part are defined, and LV.cpp/h, in which the dynamics of the agent-based model is specified.
-- [Testing](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing): in this folder (still under development) the main functions of the program are tested.
+- [Testing](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing): in this folder the main functions of the program are tested.
 - [Utilites](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/utilities): this folder contains several files that are required both for the numerical simulation and the agent-based model. In particular, we distinguish the reader.cpp/h files, in which the functions to read the data are defined, plotter.py, which handles the visualization of the trends, and utilities.h, which contains the parameter for the simulation.
 - [Data](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data): this folder contains some examples of data regarding the dynamics of the model (growth rates in rates.txt, initial conditions in values.txt, interaction matrix in matrix.txt and carrying capacities in capacity.txt) with different number of species.
 - [Output](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/output): this folder will contain the plots if SAVE_PLOT in utilies.h is set to true.
@@ -73,7 +73,7 @@ sudo apt-get install binutils-gold
 ```
 
 ### Python
-At the moment to run the program the python3 version is required (looking for a way to remove this dependence).
+At the moment to run the program the python3 version is required.
 For the python script the following libraries are required:
 
 - numpy
