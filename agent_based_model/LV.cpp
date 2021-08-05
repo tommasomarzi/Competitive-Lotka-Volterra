@@ -2,6 +2,12 @@
 #include <iostream>
 #include <stdlib.h>
 
+
+/**
+ * Instantiate the agent-based model in a grid. 
+ * @param rows_ The number of cells in the x-axis
+ * @param columns_ The number of cells in the y-axis
+ */
 LV::LV(const int rows_, const int columns_): rows(rows_), columns(columns_) 
 {
     grid = new int*[rows];
@@ -72,6 +78,10 @@ LV::~LV()
 }
 
 
+/**
+ * Stamp in the shell the chosen parameters and the associated colors.
+ * If the graphical part is enabled, display some useful commands.
+ */
 void LV::configuration()
 {
     cout<<endl;
@@ -130,18 +140,31 @@ void LV::configuration()
 }
 
 
-float* LV::get_specie_color(int x, int y)
-{
+/**
+ * Get the color associated to the content of a cell (x,y).
+ * @param x x position of the cell
+ * @param y y position of the cell
+ * @return 3-dimensional array with the corresponding RGB values.
+ */
+float* LV::get_species_color(int x, int y)
+{    
     return colors[grid[x][y] + 1];
 }
 
 
+/**
+ * Compute the content of a cell in the next iteration based on its neighborhood.
+ * @param x x position of the cell
+ * @param y y position of the cell
+ * @return value of the cell at the next iteration
+ */
 int LV::neighborhood(int x, int y)
 {
     int result;
     vector<int> presences(values_zero.size() + 1, 0);
     vector<bool> empty_cells(9, false);
 
+    //BOUNDARY CONDITIONS
 	nb_x[0] = (x == 0 ? rows - 1: x - 1);
 	nb_x[1] = x;
 	nb_x[2] = (x == rows - 1 ? 0 : x + 1);
@@ -177,6 +200,12 @@ int LV::neighborhood(int x, int y)
 }
 
 
+/**
+ *  In the case in which a cell is empty, compute its value at the next iteration 
+    based on the growth rates of the neighborhood.
+ * @param presences occupation of the neighborhood.
+ * @return value of the cell at the next iteration.
+ */
 int LV::filler(vector<int> presences)
 {
     int result;
@@ -211,26 +240,15 @@ int LV::filler(vector<int> presences)
 }
 
 
-int LV::normalizer()
-{
-    int result = -1;
-    int cells = rows*columns;
-    double rv = (double)rand() / RAND_MAX;
-    double prob = 0.0;
-    for(int i = 0; i < values_zero.size(); i++)
-    {
-        prob += values_zero[i]*capacity[i]/cells;
-        if(rv < prob)
-        {
-            result = i;
-            break;
-        }
-    }
-    return result;
-}
-
-
-int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
+/**
+ *  In the case in which a cell is occupied by an individual, compute its value at the next iteration 
+    according to the interaction with the neighborhood.
+ * @param presences occupation of the neighborhood.
+ * @param empty_cells spatial information on the occupation of the neighborhood.
+ * @param species species which occupies the cell. 
+ * @return value of the cell at the next iteration.
+ */
+int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
 {    
     int result;
     double rv = (double)rand() / RAND_MAX;
@@ -241,7 +259,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
         prob += presences[i]/8.0;
         if(rv < prob)
         {
-            if((i - 1) == specie)               //iteration[i][i] == 1
+            if((i - 1) == species)               //iteration[i][i] == 1
             {
                result = -1;                    // A + A -> 0 + A
             }
@@ -258,14 +276,14 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
                 int cell = random_walk(empty_cells, count_empty);
                 if(ENABLE_BIRTHS)
                 {
-                    double den  = count_empty*rates[specie] + (8-count_empty);
+                    double den  = count_empty*rates[species] + (8-count_empty);
                     rv = (double)rand() / RAND_MAX;
 
-                    if(rv < (count_empty*rates[specie]/den))
+                    if(rv < (count_empty*rates[species]/den))
                     {
                         if(cell == 9)
                         {
-                            result = specie;                              // A + 0 -> A + 0
+                            result = species;                              // A + 0 -> A + 0
                         }
                         else
                         {
@@ -276,7 +294,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
                     {
                         if(cell == 9)
                         {
-                            result = specie;                            // A + 0 -> A + 0
+                            result = species;                            // A + 0 -> A + 0
                         }
                         else
                         {
@@ -288,7 +306,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
                 {
                     if(cell == 9)
                     {
-                        result = specie;                            // A + 0 -> A + 0
+                        result = species;                            // A + 0 -> A + 0
                     }
                     else
                     {
@@ -299,13 +317,13 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
             else
             {
                 rv = (double)rand() / RAND_MAX;
-                if(rv < interaction[specie][i-1])
+                if(rv < interaction[species][i-1])
                 {
                     result = -1;                 //A + X -> 0 + X
                 }
                 else
                 {
-                    result = specie;             //A + X -> A + X
+                    result = species;             //A + X -> A + X
                 }
             }
             break;
@@ -315,6 +333,13 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int specie)
 }
 
 
+/**
+ *  In the case in which a cell is occupied by an individual and it interacts with an empty cell,
+    the individual has the opportunity to move towards that cell. 
+ * @param empty_cells spatial information on the occupation of the neighborhood.
+ * @param count_empty number of empty cells in the neighborhood.
+ * @return the cell that will be occupied by the individual at the next iteration.
+ */
 int LV::random_walk(vector<bool> empty_cells, int count_empty)
 {
     int result = 9;
@@ -339,6 +364,35 @@ int LV::random_walk(vector<bool> empty_cells, int count_empty)
 }
 
 
+/**
+ *  At the beginning, generate an individual with a probability depending on the initial values, 
+    the carrying capacities and the dimensions of the grid.
+ * @return value of the cell.
+ */
+int LV::normalizer()
+{
+    int result = -1;
+    int cells = rows*columns;
+    double rv = (double)rand() / RAND_MAX;
+    double prob = 0.0;
+    for(int i = 0; i < values_zero.size(); i++)
+    {
+        prob += values_zero[i]*capacity[i]/cells;
+        if(rv < prob)
+        {
+            result = i;
+            break;
+        }
+    }
+    return result;
+}
+
+
+/**
+ *  At the beginning, initialize each cell of the grid in a probabilistic way based on the initial values, 
+    the carrying capacities and the dimensions of the grid.
+ * @see normalizer()
+ */
 void LV::initializer_fill() 
 {      
 	for(int i = 0; i < rows; ++i)
@@ -351,6 +405,10 @@ void LV::initializer_fill()
 }
 
 
+/**
+ *  Pick randomly a cell of the grid and get its value at the next iteration.
+ *  @see neighborhood(int x, int y)
+ */
 void LV::evolve() 
 {
     int result, shift, destination;
@@ -444,6 +502,9 @@ void LV::evolve()
 }
 
 
+/**
+ *  Save the values of the species normalized on the carrying capacities in the output file.
+ */
 void LV::print_output()
 {
     double species[values_zero.size()] = {0};
@@ -465,12 +526,18 @@ void LV::print_output()
 }
 
 
+/**
+ * @return the current iteration.
+ */
 int LV::get_iter()
 {
     return iter;
 }
 
 
+/**
+ * Display in the shell the values of the species normalized on the carrying capacities at the current iteration.
+ */
 void LV::get_stats()
 {
     double species[values_zero.size()] = {0};
@@ -487,7 +554,7 @@ void LV::get_stats()
     for(int i = 0; i < values_zero.size(); i++)
     {   
         cout<<endl;
-        cout<<"SPECIE: "<<i+1<<"    INDIVIDUALS: "<<species[i]/capacity[i]<<endl;
+        cout<<"SPECIES: "<<i+1<<"    INDIVIDUALS: "<<species[i]/capacity[i]<<endl;
     }
     cout<<endl;
 }

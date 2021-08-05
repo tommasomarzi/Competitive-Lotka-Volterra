@@ -6,6 +6,10 @@
 #include "../utilities/reader.cpp"
 #include "../testing/general.cpp"
 
+/**
+ * @brief Class to generate an agent-based model which evolves in a grid according to stochastic rules
+ * based on the theoretical competitive Lotka-Volterra model.
+ */
 class LV 
 {
 private:
@@ -20,24 +24,24 @@ private:
 
     ofstream to_plot;
 
-    friend class LV_Fixture;
+    friend class LV_Fixture;                //!< Class for testing.
 
-    int neighborhood(const int, const int);
-    int normalizer();
-    int normalizer(vector<int>, vector<bool>, int);
-    int random_walk(vector<bool>, int);
-    int filler(vector<int>);
-    void configuration();
-    void print_output();
+    int neighborhood(int, int);             //!< Update the value of a cell.
+    int normalizer(vector<int>, vector<bool>, int);     //!< Evolve an occupied cell.
+    int random_walk(vector<bool>, int);     //!< Possibility of movement.   
+    int normalizer();                       //!< Initialize a cell.
+    int filler(vector<int>);                //!< Evolve an empty cell.
+    void configuration();                   //!< Display the configuration.
+    void print_output();                    //!< Save the values of the populations.
     
 public:
-    LV(const int, const int);
-	~LV();
-	void initializer_fill();
-	void evolve();
-    float* get_specie_color(int, int);
-    int get_iter();
-    void get_stats();
+    LV(const int, const int);               //!< Parametrized constructor of the class.
+	~LV();                                  //!< Destructor of the class.
+	void initializer_fill();                //!< Initialize the grid.
+	void evolve();                          //!< Evolve the simulation.
+    float* get_species_color(int, int);     //!< Get the color associated to the content of a cell.
+    int get_iter();                         //!< Get the current iteration.
+    void get_stats();                       //!< Get the values of the populations.
 };
 
 const int n_colors = 8;

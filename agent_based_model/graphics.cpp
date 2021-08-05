@@ -28,14 +28,14 @@ void display(void)
 	glLoadIdentity();                                     // Reset  The View
   	double x_scale = (w_right - w_left) / n_rows;
 	double y_scale = (w_up - w_down) / n_cols;
-	float* specie;
+	float* species;
 	glBegin(GL_QUADS);                                    //delimit the vertices of a primitive (vertex stream)
 	for (int x = 0; x < n_rows; ++x) 
 	{
 		for (int y = 0; y < n_cols; ++y) 
 		{
-            specie = simulation->get_specie_color(x, y);
-			glColor3f(specie[0],specie[1],specie[2]);
+            species = simulation->get_species_color(x, y);
+			glColor3f(species[0],species[1],species[2]);
 			glVertex2f(w_left + x_scale*x,     w_down + y_scale*y);
 			glVertex2f(w_left + x_scale*(x+1), w_down + y_scale*y);
 			glVertex2f(w_left + x_scale*(x+1), w_down + y_scale*(y+1));
