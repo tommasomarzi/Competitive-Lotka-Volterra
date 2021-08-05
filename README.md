@@ -63,7 +63,7 @@ The code is structured in the following folders:
 ### C++
 The C++ version required is the C++11 standard.
 
-In order to install the [freeGLUT library](http://freeglut.sourceforge.net/), type:
+In order to install the [freeGLUT library](http://freeglut.sourceforge.net/), type (Ubuntu or Debian Linux):
 ```bash
 sudo apt-get install freeglut3 freeglut3-dev
 ```
@@ -111,4 +111,19 @@ The testing can be done by typing (the flag '-s' silences the output of make, bu
 ```bash
 make test -s
 ```
+
+### Documentation
+The documentation is realized with [doxygen](https://www.doxygen.nl/index.html). You can install it by typing (Ubuntu or Debian Linux):
+```bash
+sudo apt-get install doxygen
+```
+In order to create the html documentation file, from the Competitive-Lotka-Volterra folder type:
+```bash
+doxygen docs/doxygen/Doxyfile
+```
+After some processing time, a folder named html which contains a bunch of files will be created in docs/: the documentation can be viewed in the file index.html and you can open it in your browser directly from the shell by typing (in my case I'm using firefox):
+```bash
+firefox docs/html/index.html 
+```
+
 
