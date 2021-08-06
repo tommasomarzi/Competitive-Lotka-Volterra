@@ -2,33 +2,45 @@
 #include <sstream>
 #include <fstream>
 
+
+/**
+ * Overwrite the interaction matrix with the coefficients of the file.
+ * @param interaction interaction matrix where to store the parameters.
+ * @param filename name of the file which contains the matrix.
+ */
 void MatrixReader(vector<vector<double>> &interaction, string filename)
 {
-    ifstream ifs(filename);       // open the file
-    string tempstr;                   // declare a temporary string
-    double tempd;                           // declare a temporary integer
-    char delimiter;                        // declare a temporary delimiter
+    ifstream ifs(filename);       
+    string tempstr;                   
+    double tempd;                           
+    char delimiter;                        
     while (getline(ifs, tempstr)) 
-    {   // read line by line from a file into a string
-        istringstream iss(tempstr);   // initialize the stringstream with that string
-        vector<double> tempv;            // declare a temporary vector for the row
+    {   
+        istringstream iss(tempstr);   
+        vector<double> tempv;            
         while (iss >> tempd) 
-        {           // extract the numbers from a stringstream
-            tempv.push_back(tempd);      // push it onto our temporary vector
-            iss >> delimiter;              // read the , delimiter
+        {          
+            tempv.push_back(tempd);      
+            iss >> delimiter;              
         }
-        interaction.push_back(tempv);                // push the vector onto vector of vectors
+        interaction.push_back(tempv);                
     }
 }
 
 
+/**
+ * Overwrite the vector with the coefficients of the file.
+ * It can be used for the vector of initial values, growth rates or carrying capacities.
+ * @param vector vector where to store the parameters.
+ * @param filename name of the file which contains the vector.
+ */
 void VectorReader(vector<double> &vector, string filename)
 {
-    ifstream ifs(filename);       // open the file
-    string tempstr;                   // declare a temporary string
-    double tempd;                           // declare a temporary integer
+    ifstream ifs(filename);      
+    string tempstr;                  
+    double tempd;                          
     while (ifs >> tempd) 
     {   
-        vector.push_back(tempd);                // push the vector onto vector of vectors
+        vector.push_back(tempd);
     }
 }
