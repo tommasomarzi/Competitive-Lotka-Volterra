@@ -1,10 +1,16 @@
 #include "lotka_volterra.h"
 #include "../utilities/setup.h"
 
+
 double h_half = h_increment/2;
 double h_six = h_increment/6;
 
 
+/**
+ * @param v original vector.
+ * @param k scalar.
+ * @return a vector composed of the elements of the original one multiplied by the scalar.
+ */
 vector<double> VectorTimesScalar(vector<double> v, double k)
 {
     vector<double> result(v.begin(), v.end());
@@ -14,6 +20,11 @@ vector<double> VectorTimesScalar(vector<double> v, double k)
 }
 
 
+/**
+ * @param v1 first vector.
+ * @param v2 second vector.
+ * @return a vector whose elements are the element-by-element sum of the vectors.
+ */
 vector<double> VectorPlusVector(vector<double> v1, vector<double> v2)
 {
     vector<double> result(v1.begin(), v1.end());
@@ -23,6 +34,14 @@ vector<double> VectorPlusVector(vector<double> v1, vector<double> v2)
 }
 
 
+/**
+ * Given the parameters associated to a species and the current values, get the time-derivative of the value of that species. 
+ * @param index species identifier.
+ * @param values vector containing the current values of all the species.
+ * @param rate growth rate of the considered species.
+ * @param interaction row of the interaction matrix associated to the considered species.
+ * @return time-derivative of the considered species.
+ */
 double lotka_volterra(int index, vector<double> values, double rate, vector<double> interaction)
 {
     double sum = 0;
@@ -32,6 +51,14 @@ double lotka_volterra(int index, vector<double> values, double rate, vector<doub
 }
 
 
+/**
+ * Given the values x at the time t_0, the Runge-Kutta 4 algorithm allows to obtain the values at the time t_0 + h,
+   where h is the time increment. This iterative algorithm commits an error of the order of h^4.
+ * @param values vector containing the current values of all the species x(t_0).
+ * @param rate  vector containing the growth rates.
+ * @param interactio interaction matrix.
+ * @return vector containing the solution of the next iteration x(t_0 + h).
+ */
 vector<double> runge_kutta(vector<double> values, vector<double> rate, vector<vector<double>> interaction)		
 {
     int i;
@@ -40,23 +67,23 @@ vector<double> runge_kutta(vector<double> values, vector<double> rate, vector<ve
     vector<double> result;  
     for(i = 0; i < values.size(); i++)
     {
-       tmp1.push_back(lotka_volterra(i, values, rate[i], interaction[i]));      //f(x(0),t)      
+       tmp1.push_back(lotka_volterra(i, values, rate[i], interaction[i]));      //f(x(t_0),t)      
     }
     fields.push_back(tmp1);
-    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_half));            //y = x(0) + f(x(0),t)*h/2
+    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_half));            //y = x(t_0) + f(x(t_0),t)*h/2
     tmp1.clear();
 
     for(i = 0; i < values.size(); i++)
         tmp1.push_back(lotka_volterra(i, tmp2, rate[i], interaction[i]));       //f(y,t) 
     fields.push_back(tmp1);  
-    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_half));            //z = x(0) + f(y,t)*h/2
+    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_half));            //z = x(t_0) + f(y,t)*h/2
     tmp1.clear();
 
     for(i = 0; i < values.size(); i++)
         tmp1.push_back(lotka_volterra(i, tmp2, rate[i], interaction[i]));       //f(z,t) 
 
     fields.push_back(tmp1);  
-    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_increment));       //w = x(0) + f(z,t)*h
+    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_increment));       //w = x(t_0) + f(z,t)*h
     tmp1.clear();
 
     for(i = 0; i < values.size(); i++)
@@ -65,11 +92,11 @@ vector<double> runge_kutta(vector<double> values, vector<double> rate, vector<ve
     
     fields[1] = VectorTimesScalar(fields[1], 2);           //f(y,t) -> 2*f(y,t)                            
     fields[2] = VectorTimesScalar(fields[2], 2);           //f(z,t) -> 2*f(z,t)
-    fields[0] = VectorPlusVector(fields[0], fields[1]);    //f(x(0),t) + 2*f(y,t)                         
-    fields[0] = VectorPlusVector(fields[0], fields[2]);    //f(x(0),t) + 2*f(y,t) + 2*f(z,t)
-    fields[0] = VectorPlusVector(fields[0], fields[3]);    //f(x(0),t) + 2*f(y,t) + 2*f(z,t) + f(w,t)
-    fields[0] = VectorTimesScalar(fields[0], h_six);       //[f(x(0),t) + 2*f(y,t) + 2*f(z,t) + f(w,t)]*h/6
+    fields[0] = VectorPlusVector(fields[0], fields[1]);    //f(x(t_0),t) + 2*f(y,t)                         
+    fields[0] = VectorPlusVector(fields[0], fields[2]);    //f(x(t_0),t) + 2*f(y,t) + 2*f(z,t)
+    fields[0] = VectorPlusVector(fields[0], fields[3]);    //f(x(t_0),t) + 2*f(y,t) + 2*f(z,t) + f(w,t)
+    fields[0] = VectorTimesScalar(fields[0], h_six);       //[f(x(t_0),t) + 2*f(y,t) + 2*f(z,t) + f(w,t)]*h/6
 
-    result = VectorPlusVector(values, fields[0]);          //x(0) + [f(x(0),t) + 2*f(y,t) + 2*f(z,t) + f(w,t)]*h/6                               
+    result = VectorPlusVector(values, fields[0]);          //x(t_0) + [f(x(t_0),t) + 2*f(y,t) + 2*f(z,t) + f(w,t)]*h/6                               
     return result;
 }
