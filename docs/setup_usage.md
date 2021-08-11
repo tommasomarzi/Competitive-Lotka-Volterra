@@ -38,13 +38,15 @@ Another example of incorrect use:
 * **LOCAL_ITER**:                       number of iterations of the agent-based model corresponding to one iteration in the numerical simulation.
 * **ENABLE_BIRTHS**:                    as the README.md explains, if the considered cell is not empty and it interacts with an empty cell the individual can move according to an uniform probability. This parameter complexifies this dynamics: if ENABLE_BIRTHS is set to true, it has the opportunity to generate another individual in an empty cell with a probability:
 
-    ![equation_p](https://latex.codecogs.com/gif.latex?p_i&space;=&space;\frac{r_ig_0}{r_ig_0&space;&plus;&space;(8-g_0)})
-
+    <p  align="center">
+    <img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;p_i&space;=&space;\frac{r_ig_0}{r_ig_0&space;&plus;&space;(8-g_0)}" title="\bg_white p_i = \frac{r_ig_0}{r_ig_0 + (8-g_0)}" />
+    <p\>
+    
 If this event does not occur, the individual can move according to an uniform probability as in the standard case.
 * **n_rows**:                           number of rows of the grid in the agent-based model.
 * **n_cols**:                           number of columns of the grid in the agent-based model.
-* **w_width**:                          width of the window which displays the graphical part of the agent-based model.
-* **w_height**:                         height of the window which displays the graphical part of the agent-based model.
+* **w_width**:                          width in pixels of the window which displays the graphical part of the agent-based model.
+* **w_height**:                         height in pixels of the window which displays the graphical part of the agent-based model.
 * **w_right, w_left, w_up, w_down**:    corners of the orthographic viewing region (**not recommended to change**).
 * **fps**:                              frame per second, i.e. the time (measured in *s<sup>-1</sup>*) to refresh and update the window of the graphical part.
 * **folder**:                           name of the folder in the [data folder](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data) which contains the required parameters (rates.txt, values.txt, matrix.txt and capacity.txt) and that will contain the output files (output_ns.txt and output_abm.txt).
