@@ -52,9 +52,7 @@ where *K<sub>i</sub>* is the carrying capacity of the species *i* (i.e. maximum 
     If *j* = 0 then the individual can move to an empty cell (or it stays in the current one) with a uniform probability.
     If *j* = 1, ..., N then the individual in the considered cell dies with a probability *&alpha;<sub>ij</sub>*. Therefore, we require that *&alpha;<sub>ij</sub>* <= 1.
 
-The simulation evolves up to the chosen number of iterations.
-
-The graphical part of the Agent-Based model is made with [OpenGL](https://www.opengl.org//).
+The simulation evolves up to the chosen number of iterations (check the [setup_usage](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/docs/setup_usage.md) file).
 
 
 ## Structure of the code:
@@ -71,11 +69,12 @@ The code is structured in the following folders:
 ### C++
 The C++ version required is the C++11 standard.
 
-In order to install the [freeGLUT library](http://freeglut.sourceforge.net/), type (Ubuntu or Debian Linux):
+The graphical part of the agent-based model is made with [OpenGL](https://www.opengl.org//) using the [FreeGlut library](http://freeglut.sourceforge.net/). 
+To install it, type (Ubuntu or Debian Linux):
 ```bash
 sudo apt-get install freeglut3 freeglut3-dev
 ```
-and for the [GNU binutils](https://www.gnu.org/software/binutils/) tools:
+To install the [GNU binutils](https://www.gnu.org/software/binutils/) tools, type:
 ```bash
 sudo apt-get install binutils-gold
 ```
@@ -104,7 +103,7 @@ cd Competitive-Lotka-Volterra
 ```
 
 ### Run the model
-Once the configuration in the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) file has been chosen (**please refer to the [setup_usage file](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/docs/setup_usage.md)**), in order to build and run the simulation type (the flag '-s' silences the output of make, but it is not strictly necessary):
+Once the configuration in the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) file has been chosen (**please refer to the [setup_usage](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/docs/setup_usage.md) file**), in order to build and run the simulation type (the flag '-s' silences the output of make, but it is not strictly necessary):
 ```bash
 make model -s
 ```
