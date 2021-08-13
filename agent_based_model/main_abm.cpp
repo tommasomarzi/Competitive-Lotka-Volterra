@@ -10,8 +10,8 @@ int main(int argc, char **argv)
 	{
 		glutInit(&argc, argv);
 		create_window();
-		glutDisplayFunc(display);             //sets the display callback for the current window
     	glutReshapeFunc(reshape);             //sets the reshape callback for the current window
+		glutDisplayFunc(display);             //sets the display callback for the current window
 		update(0);
 		glutKeyboardFunc(keypress);
 		glutMainLoop();						  //enters the GLUT event processing loop

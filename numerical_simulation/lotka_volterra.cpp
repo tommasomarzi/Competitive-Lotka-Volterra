@@ -56,7 +56,7 @@ double lotka_volterra(int index, vector<double> values, double rate, vector<doub
    where h is the time increment. This iterative algorithm commits an error of the order of h^4.
  * @param values vector containing the current values of all the species x(t_0).
  * @param rate  vector containing the growth rates.
- * @param interactio interaction matrix.
+ * @param interaction interaction matrix.
  * @return vector containing the solution of the next iteration x(t_0 + h).
  */
 vector<double> runge_kutta(vector<double> values, vector<double> rate, vector<vector<double>> interaction)		
