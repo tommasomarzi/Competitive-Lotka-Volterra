@@ -1,4 +1,4 @@
-# **Usage of setup.py**
+# Usage of setup.h
 This file aims to explain each parameter of the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) file.
 
 ## Warning
@@ -6,31 +6,6 @@ Since at the moment I have not found a formal way to convert the parameters defi
 
 As one can see, this method is based on regex matching. 
 Therefore, it is required not to overturn the original structure of the file in order to avoid possible conflicts with extra characters or punctuation and compromise the correct operation of the program.
-
-<!--
-## Warning
-Since at the moment I have not found a formal way to convert the parameters defined in the header file into a format usable by python, the conversion into a dictionary is done through a regex in the lines 6-13 of [plotter.py](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/plotter.py). 
-
-This method works but it is sensitive to extra spaces and possible comments: therefore, to ensure its proper operation it is required that there are no spaces or comments after the parameter value (i.e. each line ends with the value).
-
-The following examples should clear up any doubts (please select the text in the code box).
-
-Example of correct use:
-```cpp
-#define this_is             "a_correct_format"
-#define does_it_work        true
-```
-Example of incorrect use:
-```cpp
-#define this_is             "an_incorrect_format"          
-#define does_it_work        false    
-```
-Another example of incorrect use:
-```cpp
-#define this_is             "an_incorrect_format"//this comment must be deleted! 
-#define does_it_work        false
-```
--->
 
 ## Explanation of the parameters
 * **ITER_MAX**:                         number of iterations of the models.
@@ -40,7 +15,7 @@ Another example of incorrect use:
 
     <p  align="center">
     <img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;p_i&space;=&space;\frac{r_ig_0}{r_ig_0&space;&plus;&space;(8-g_0)}" title="\bg_white p_i = \frac{r_ig_0}{r_ig_0 + (8-g_0)}" />
-    <p\>
+    </p>
     
 If this event does not occur, the individual can move according to an uniform probability as in the standard case.
 * **n_rows**:                           number of rows of the grid in the agent-based model.
