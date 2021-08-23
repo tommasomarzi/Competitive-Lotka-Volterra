@@ -1,3 +1,7 @@
+/*! \file LV.h
+    \brief Header of the LV.cpp file. 
+*/
+
 #ifndef LV_H
 #define LV_H
 

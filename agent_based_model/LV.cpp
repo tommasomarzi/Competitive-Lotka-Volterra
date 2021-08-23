@@ -1,3 +1,7 @@
+/*! \file LV.cpp
+    \brief Define the agent-based model class. 
+*/
+
 #include "LV.h"
 #include <iostream>
 #include <stdlib.h>

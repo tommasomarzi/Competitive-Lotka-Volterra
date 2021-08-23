@@ -1,3 +1,7 @@
+/*! \file graphics.h
+    \brief Header of the graphics.cpp file.
+*/
+
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 

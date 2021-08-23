@@ -1,3 +1,7 @@
+/*! \file main_abm.cpp
+    \brief It contains the main function for the agent-based model. 
+*/
+
 #include "graphics.cpp"
 
 LV *simulation;

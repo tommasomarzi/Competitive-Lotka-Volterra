@@ -1,3 +1,7 @@
+/*! \file graphics.cpp
+    \brief Handle the graphical part of the agent-based model.
+*/
+
 #include "graphics.h"
 
 
