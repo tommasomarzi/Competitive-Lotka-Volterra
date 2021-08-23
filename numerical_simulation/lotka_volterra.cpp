@@ -1,3 +1,7 @@
+/*! \file lotka_volterra.cpp
+    \brief Compute the numerical solution of the model.
+*/
+
 #include "lotka_volterra.h"
 #include "../utilities/setup.h"
 

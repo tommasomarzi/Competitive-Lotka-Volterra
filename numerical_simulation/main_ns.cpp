@@ -1,3 +1,7 @@
+/*! \file main_ns.cpp
+    \brief It contains the main function for the numerical simulation. 
+*/
+
 #include "lotka_volterra.cpp"
 #include "../utilities/reader.cpp"
 #include "../testing/general.cpp"

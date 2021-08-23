@@ -1,3 +1,7 @@
+/*! \file lotka_volterra.h
+    \brief Header of the lotka_volterra.cpp file.
+*/
+
 #ifndef LOTKA_VOLTERRA_H
 #define LOTKA_VOLTERRA_H
 
