@@ -17,16 +17,22 @@
 class LV 
 {
 private:
-	int rows, columns, iter, local_iter;
-    int **grid;
-    int *nb_x, *nb_y;
+	int rows;                               //!< Number of rows of the grid.
+    int columns;                            //!< Number of columns of the grid.
+    int iter;                               //!< Current iteration. 
+    int local_iter;                         //!< Local iteration of the model.
+    int **grid;                             //!< rows x columns grid
+    int *nb_x;                              //!< Neighborhood of the current cell in the x direction.
+    int *nb_y;                              //!< Neighborhood of the current cell in the y direction.
 
-    vector<vector<double>> interaction;
-    vector<double> values_zero, rates, capacity;
+    vector<vector<double>> interaction;     //!< Interaction matrix.
+    vector<double> values_zero;             //!< Initial values of the populations.
+    vector<double> rates;                   //!< Growth rates of the populations.
+    vector<double> capacity;                //!< Carrying capacities of the populations.
     
-    float **colors;
+    float **colors;                         //!< Colors for the species in RGB.
 
-    ofstream to_plot;
+    ofstream to_plot;                       //!< Output file.
 
     friend class LV_Fixture;                //!< Class for testing.
 
