@@ -1,3 +1,7 @@
+/*! \file setup.h
+    \brief Configuration file. Check the setup_usage.md file for the usage.
+*/
+
 #ifndef SETUP_H
 #define SETUP_H
 

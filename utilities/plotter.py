@@ -1,3 +1,7 @@
+'''! @file plotter.py
+    @brief Define the functions to plot the results of the simulation.
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 import re
@@ -258,10 +262,10 @@ def plot_handler():
                 else:
                     plt.show() 
     
-    if n_species > 4:
-        logging.warning('A plot with more than four species is not supported.\nPlease set ENABLE_PLOT_NS and ENABLE_PLOT_ABM to false.')
-    elif n_species == 1:
-        logging.warning('A trajectory in the one-species space makes no sense.\nPlease set ENABLE_PLOT_NS and ENABLE_PLOT_ABM to false.')
+        if n_species > 4:
+            logging.warning('A plot with more than four species is not supported.\nPlease set ENABLE_PLOT_NS and ENABLE_PLOT_ABM to false.')
+        elif n_species == 1:
+            logging.warning('A trajectory in the one-species space makes no sense.\nPlease set ENABLE_PLOT_NS and ENABLE_PLOT_ABM to false.')
 
 
 if __name__ == "__main__":

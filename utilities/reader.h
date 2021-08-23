@@ -1,3 +1,6 @@
+/*! \file reader.h
+    \brief Header of the reader.cpp file.
+*/
 #ifndef READER_H
 #define READER_H
 

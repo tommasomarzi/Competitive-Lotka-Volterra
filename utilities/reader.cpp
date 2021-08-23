@@ -1,10 +1,13 @@
+/*! \file reader.cpp
+    \brief Define the functions to read the data from the configuration files.
+*/
 #include "reader.h"
 #include <sstream>
 #include <fstream>
 
 
 /**
- * Overwrite the interaction matrix with the coefficients of the file.
+ * Overwrite the interaction matrix with the coefficients of the configuration file.
  * @param interaction interaction matrix where to store the parameters.
  * @param filename name of the file which contains the matrix.
  */
@@ -29,7 +32,7 @@ void MatrixReader(vector<vector<double>> &interaction, string filename)
 
 
 /**
- * Overwrite the vector with the coefficients of the file.
+ * Overwrite the vector with the coefficients of the configuration file.
  * It can be used for the vector of initial values, growth rates or carrying capacities.
  * @param vector vector where to store the parameters.
  * @param filename name of the file which contains the vector.
