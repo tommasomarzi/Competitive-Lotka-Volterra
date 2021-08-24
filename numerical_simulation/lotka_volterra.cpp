@@ -56,6 +56,46 @@ double lotka_volterra(int index, vector<double> values, double rate, vector<doub
 
 
 /**
+ * Compute the field for the Runge-Kutta 4 algorithm and allow to use iteratively the result.
+ * @param values vector containing the starting values of all the species of the previous field.
+ * @param rate  vector containing the growth rates.
+ * @param interaction interaction matrix.
+ * @param fields vector containing the auxiliary fields.
+ * @param increment the time increment associated to the field.
+ * @return vector containing the values of the computed field.
+ */
+vector<double> compute_fields(vector<double> values, vector<double> rate, vector<vector<double>> interaction, vector<vector<double>> &fields, double increment)		
+{
+    vector<double> tmp;
+    for(int i = 0; i < values.size(); i++)
+    {
+       tmp.push_back(lotka_volterra(i, values, rate[i], interaction[i]));    
+    }
+    fields.push_back(tmp);
+    tmp = VectorTimesScalar(tmp,increment);
+    return tmp;
+}
+
+
+/**
+ * Compute the last field for the Runge-Kutta 4 algorithm. 
+ * @param values vector containing the starting values of all the species of the previous field.
+ * @param rate  vector containing the growth rates.
+ * @param interaction interaction matrix.
+ * @param fields vector containing the auxiliary fields.
+ */
+void compute_fields(vector<double> values, vector<double> rate, vector<vector<double>> interaction, vector<vector<double>> &fields)		
+{
+    vector<double> tmp;
+    for(int i = 0; i < values.size(); i++)
+    {
+       tmp.push_back(lotka_volterra(i, values, rate[i], interaction[i]));    
+    }
+    fields.push_back(tmp);
+}
+
+
+/**
  * Given the values x at the time t_0, the Runge-Kutta 4 algorithm allows to obtain the values at the time t_0 + h,
    where h is the time increment. This iterative algorithm commits an error of the order of h^4.
  * @param values vector containing the current values of all the species x(t_0).
@@ -65,37 +105,20 @@ double lotka_volterra(int index, vector<double> values, double rate, vector<doub
  */
 vector<double> runge_kutta(vector<double> values, vector<double> rate, vector<vector<double>> interaction)		
 {
-    int i;
     vector<vector<double>> fields;
-    vector<double> tmp1, tmp2;
+    vector<double> tmp2;
     vector<double> result;  
-    for(i = 0; i < values.size(); i++)
-    {
-       tmp1.push_back(lotka_volterra(i, values, rate[i], interaction[i]));      //f(x(t_0),t)      
-    }
-    fields.push_back(tmp1);
-    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_half));            //y = x(t_0) + f(x(t_0),t)*h/2
-    tmp1.clear();
 
-    for(i = 0; i < values.size(); i++)
-        tmp1.push_back(lotka_volterra(i, tmp2, rate[i], interaction[i]));       //f(y,t) 
-    fields.push_back(tmp1);  
-    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_half));            //z = x(t_0) + f(y,t)*h/2
-    tmp1.clear();
+    tmp2 = compute_fields(values, rate, interaction, fields, h_half);         //f(x(t_0),t)*h/2
+    tmp2 = VectorPlusVector(values, tmp2);                                    //y = x(t_0) + f(x(t_0),t)*h/2
+    tmp2 = compute_fields(tmp2, rate, interaction, fields, h_half);           //f(y,t)*h/2
+    tmp2 = VectorPlusVector(values, tmp2);                                    //z = x(t_0) + f(y,t)*h/2
+    tmp2 = compute_fields(tmp2, rate, interaction, fields, h_increment);      //f(z,t)*h
+    tmp2 = VectorPlusVector(values, tmp2);                                    //w = x(t_0) + f(z,t)*h
+    compute_fields(tmp2, rate, interaction, fields);                          //f(w,t)
 
-    for(i = 0; i < values.size(); i++)
-        tmp1.push_back(lotka_volterra(i, tmp2, rate[i], interaction[i]));       //f(z,t) 
-
-    fields.push_back(tmp1);  
-    tmp2 = VectorPlusVector(values, VectorTimesScalar(tmp1,h_increment));       //w = x(t_0) + f(z,t)*h
-    tmp1.clear();
-
-    for(i = 0; i < values.size(); i++)
-        tmp1.push_back(lotka_volterra(i, tmp2, rate[i], interaction[i]));       //f(w,t) 
-    fields.push_back(tmp1);  
-    
-    fields[1] = VectorTimesScalar(fields[1], 2);           //f(y,t) -> 2*f(y,t)                            
-    fields[2] = VectorTimesScalar(fields[2], 2);           //f(z,t) -> 2*f(z,t)
+    fields[1] = VectorTimesScalar(fields[1], 2.0);           //f(y,t) -> 2*f(y,t)                            
+    fields[2] = VectorTimesScalar(fields[2], 2.0);           //f(z,t) -> 2*f(z,t)
     fields[0] = VectorPlusVector(fields[0], fields[1]);    //f(x(t_0),t) + 2*f(y,t)                         
     fields[0] = VectorPlusVector(fields[0], fields[2]);    //f(x(t_0),t) + 2*f(y,t) + 2*f(z,t)
     fields[0] = VectorPlusVector(fields[0], fields[3]);    //f(x(t_0),t) + 2*f(y,t) + 2*f(z,t) + f(w,t)
