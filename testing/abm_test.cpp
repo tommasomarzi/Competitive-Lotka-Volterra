@@ -54,9 +54,9 @@ class LV_Fixture
     {
         int tot = 8;
         vector<int> pres(n_species + 1,0);
-        int rv;
         for(int i = 1; i < pres.size(); i++) 
         {
+            int rv;
             rv = rand()% tot;
             pres[i] = rv;
             tot -= rv;     
@@ -95,13 +95,14 @@ class LV_Fixture
 
 TEST_CASE_METHOD(LV_Fixture, "Test LV class methods") 
 {
-    int result;   
-    int x;
-    int y;
-    bool check;
-
     for(int n_sim = 0; n_sim < N_SIM_TEST; n_sim++)
     {
+        int result;   
+        int x;
+        int y;
+        bool check;
+
+        
         //LV::neighborhood(int,int)
         x = rand() % row;
         y = rand() % col;
