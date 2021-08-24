@@ -1,13 +1,11 @@
 '''! @file plotter.py
-    @brief Define the functions to plot the results of the simulation.
+     @brief Define the functions to plot the results of the simulation.
 '''
 
 import numpy as np
 import matplotlib.pyplot as plt
 import re
 import logging
-from mpl_toolkits.mplot3d import Axes3D
-
 
 def setup_parser():
     '''
@@ -18,6 +16,7 @@ def setup_parser():
         setup : dict
             Dictionary containing the parameters of the setup file.
     '''
+
     setup = {}
     with open("utilities/setup.h") as setup_file:
         next(setup_file)
@@ -28,11 +27,43 @@ def setup_parser():
                 matches = re.search('#define\s+([A-Za-z]\w+)\s+(.*\S+)', line)
                 if matches:
                     setup[matches[1]] = matches[2]
-    
+
     if setup['ENABLE_OUTPUT'] == "false":
         logging.warning('ENABLE_OUTPUT is set to false. If no output files are present in the chosen folder, an error will occur.')
 
     return setup
+
+
+def get_paths(setup):
+    '''
+    Get the list of the paths of the files to be plotted.
+
+    Parameters
+    ----------
+        setup : dict
+            Dictionary containing the parameters of the setup file.
+
+    Returns
+    -------
+        path_ns : str
+            Path containing the data of the numerical simulation.
+        path_abm : str
+            Path containing the data of the agent-based model.
+        path_list : list
+            list containing the paths of the output files to be plotted.
+    '''
+
+    path_abm = "data/{}/output_abm.txt".format(setup['folder'].replace('"',''))
+    path_ns  = "data/{}/output_ns.txt".format(setup['folder'].replace('"',''))
+
+    path_list = []
+
+    if setup['ENABLE_PLOT_NS'] == "true":
+        path_list.append(path_ns)
+    if setup['ENABLE_PLOT_ABM'] == "true":
+        path_list.append(path_abm)
+
+    return path_ns, path_abm, path_list
 
 
 def models_vs_iter(path_ns, path_abm):
@@ -195,6 +226,36 @@ def four_species(file_data, model):
     return fig
 
 
+def plot_choice(file_data, model, n_species):
+    '''
+    Choose the plot according to the number of species and save it.
+
+    Parameters
+    ----------
+        file_data : numpy.ndarray
+            Array containing the data of the species for each iteration.
+        model : str
+            Model to plot. It can be ns (numerical simulation) or abm (agent-based model).
+        n_species : int
+            Number of species in the simulation.
+
+    Returns
+    -------
+        fig : matplotlib.figure.Figure
+            Plot of the trajectory in the population space.
+    '''
+
+    if n_species == 2:
+        figure = two_species(file_data, model)
+    elif n_species == 3:
+        figure = three_species(file_data, model)
+    elif n_species == 4:
+        figure = four_species(file_data, model)
+    
+    return figure   
+
+
+
 def save_plot(figure, model, n_species, path = 'output/figure_'):
     '''
     Save the plot with a specific path according to the model and the type of plot.
@@ -223,21 +284,15 @@ def plot_handler():
     '''
 
     setup = setup_parser()
-    path_abm = "data/{}/output_abm.txt".format(setup['folder'].replace('"',''))
-    path_ns  = "data/{}/output_ns.txt".format(setup['folder'].replace('"',''))
-    
+
+    path_ns, path_abm, path_list = get_paths(setup)
+
     if setup['ENABLE_COMPARISON'] == "true":
         figure, n_species = models_vs_iter(path_ns, path_abm)
         if setup['SAVE_PLOT'] == "true":
             save_plot(figure, "both", n_species)
         else:
             plt.show()
-            
-    path_list = []
-    if setup['ENABLE_PLOT_NS'] == "true":
-        path_list.append(path_ns)
-    if setup['ENABLE_PLOT_ABM'] == "true":
-        path_list.append(path_abm)
 
     if path_list:
         for path in path_list:
@@ -252,20 +307,14 @@ def plot_handler():
                 n_species = file_data.shape[1]
             else:
                 n_species = 1
-             
-            if n_species == 2:
-                figure = two_species(file_data, model)
-            if n_species == 3:
-                figure = three_species(file_data, model)
-            if n_species == 4:
-                figure = four_species(file_data, model)
             
             if (n_species > 1 and n_species < 5):
+                figure = plot_choice(file_data, model, n_species)
                 if setup['SAVE_PLOT'] == "true":
                     save_plot(figure, model, n_species)
                 else:
-                    plt.show()
-    
+                    plt.show() 
+
         if n_species > 4:
             logging.warning('A plot with more than four species is not supported.\nPlease set ENABLE_PLOT_NS and ENABLE_PLOT_ABM to false.')
         elif n_species == 1:
