@@ -212,7 +212,7 @@ int LV::neighborhood(int x, int y)
  */
 int LV::filler(vector<int> presences)
 {
-    int result;
+    int result = -2;
     double den = 0.0;
     double rv = (double)rand() / RAND_MAX;
     double prob = 0.0;
@@ -239,6 +239,12 @@ int LV::filler(vector<int> presences)
             result = i - 1;
             break;
         }
+    }
+
+    if(result == -2)
+    {
+        cout<<"ERROR: an internal error has occurred (an incorrect value has been assigned). Aborted."<<endl;
+        exit(1);
     }
     return result;
 }
@@ -415,7 +421,7 @@ void LV::initializer_fill()
  */
 void LV::evolve() 
 {
-    int result, shift, destination;
+    int result, destination;
     int x = rand() % rows;
     int y = rand() % columns;
     result = neighborhood(x, y);
@@ -425,7 +431,7 @@ void LV::evolve()
     }
     else 
     {
-        shift = result - (int(values_zero.size()) + 1);
+        int shift = result - (int(values_zero.size()) + 1);
         bool birth;
         if(shift > 99)
         {
