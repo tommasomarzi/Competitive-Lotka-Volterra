@@ -61,7 +61,7 @@ where *K<sub>i</sub>* is the carrying capacity of the species *i* (i.e. maximum 
 
 The simulation evolves up to the chosen number of iterations (check the [setup_usage](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/docs/setup_usage.md) file).
 
-## Structure of the code ##
+## Structure of the code
 The code is structured in the following folders:
 *   [Numerical simulation](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/numerical_simulation): in this folder the numerical solution of the competitive Lotka-Volterra model is computed through the RK4 algorithm. In particular, main_ns.cpp handles the main loop and it calls the algorithm and the model that are present in lotka_volterra.cpp/h files.
 *   [Agent-based model](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/agent_based_model): in this folder three blocks of files are present, i.e. main_abm.cpp, which handles the glutMainLoop (if the graphical part is enabled), graphics.cpp/h in which the rules concerning the graphical part are defined, and LV.cpp/h, in which the dynamics of the agent-based model is specified.
@@ -88,8 +88,8 @@ sudo apt-get install binutils-gold
 At the moment to run the program the python3 version is required.
 For the python script the following libraries are required:
 
-- numpy
-- matplotlib 
+*   numpy
+*   matplotlib 
 
 If they are not already installed, type:
 ```bash
