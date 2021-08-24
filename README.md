@@ -2,12 +2,12 @@
 The aim of this project is to calibrate an Agent-Based model representing a competitive N-species Lotka-Volterra model with its numerical solution (performed with a [Runge-Kutta 4 algorithm](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method)).
 
 Jump to a section:
-* [Theoretical model](#The-theoretical-model)
-* [Agent-Based model](#The-Agent-Based-model)
-* [Structure of the code](#Structure-of-the-code)
-* [Requirements](#Requirements)
-* [Usage](#Usage)
-
+*   [Theoretical model](#The-theoretical-model)
+*   [Agent-Based model](#The-Agent-Based-model)
+*   [Structure of the code](#Structure-of-the-code)
+*   [Requirements](#Requirements)
+*   [Usage](#Usage)
+*   [Documentation](#Documentation)
 
 ## The theoretical model
 The model describes the evolution of N species competing for the same resources.
@@ -24,11 +24,10 @@ The evolution of each species is bounded between 0 and 1 with respect to its own
 
 For references regarding the chaotic dynamics or attractor phenomena that this model can exhibit, check the [Wikipedia page](https://en.wikipedia.org/wiki/Competitive_Lotka%E2%80%93Volterra_equations#Possible_dynamics).
 
-
 ## The Agent-Based model
 An Agent-Based model is realized by considering a *n*x*n* grid in which the individuals move and interact according to stochastic events based on the values of the parameters of the model. The rules are the following:
 
-1. at the beginning, each cell of the grid is initialized with an individual belonging to a species *i* with a probability:
+1.  at the beginning, each cell of the grid is initialized with an individual belonging to a species *i* with a probability:
 
     <p>
     <CENTER>
@@ -38,8 +37,8 @@ An Agent-Based model is realized by considering a *n*x*n* grid in which the indi
 
 where *K<sub>i</sub>* is the carrying capacity of the species *i* (i.e. maximum number that the population can reach).
 
-2. then for each iteration we pick a cell:
-    - if it is empty, an individual of a certain species is created with a probability given by:
+2.  then for each iteration we pick a cell:
+    *   if it is empty, an individual of a certain species is created with a probability given by:
 
         <p>
         <CENTER>
@@ -49,7 +48,7 @@ where *K<sub>i</sub>* is the carrying capacity of the species *i* (i.e. maximum 
 
     where *g<sub>i</sub>* is the occupation number in the eight-cells neighborhood and *Z* is a normalization constant (the rate associated to the empty cells *r<sub>0</sub>* is fixed to one and it leaves the cell unoccupied).
 
-    - if it is occupied, it interact with one kind of the neighborhood cells according to the occupation number:
+    *   if it is occupied, it interact with one kind of the neighborhood cells according to the occupation number:
     
         <p>
         <CENTER>
@@ -62,16 +61,14 @@ where *K<sub>i</sub>* is the carrying capacity of the species *i* (i.e. maximum 
 
 The simulation evolves up to the chosen number of iterations (check the [setup_usage](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/docs/setup_usage.md) file).
 
-
 ## Structure of the code ##
 The code is structured in the following folders:
-- [Numerical simulation](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/numerical_simulation): in this folder the numerical solution of the competitive Lotka-Volterra model is computed through the RK4 algorithm. In particular, main_ns.cpp handles the main loop and it calls the algorithm and the model that are present in lotka_volterra.cpp/h files.
-- [Agent-based model](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/agent_based_model): in this folder three blocks of files are present, i.e. main_abm.cpp, which handles the glutMainLoop (if the graphical part is enabled), graphics.cpp/h in which the rules concerning the graphical part are defined, and LV.cpp/h, in which the dynamics of the agent-based model is specified.
-- [Testing](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing): in this folder the main functions of the program are tested.
-- [Utilites](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/utilities): this folder contains several files that are required both for the numerical simulation and the agent-based model. In particular, we distinguish the reader.cpp/h files, in which the functions to read the data are defined, plotter.py, which handles the visualization of the trends, and utilities.h, which contains the parameter for the simulation.
-- [Data](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data): this folder contains some examples of data regarding the dynamics of the model (growth rates in rates.txt, initial conditions in values.txt, interaction matrix in matrix.txt and carrying capacities in capacity.txt) with different number of species.
-- [Output](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/output): this folder will contain the plots if SAVE_PLOT in utilies.h is set to true.
-
+*   [Numerical simulation](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/numerical_simulation): in this folder the numerical solution of the competitive Lotka-Volterra model is computed through the RK4 algorithm. In particular, main_ns.cpp handles the main loop and it calls the algorithm and the model that are present in lotka_volterra.cpp/h files.
+*   [Agent-based model](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/agent_based_model): in this folder three blocks of files are present, i.e. main_abm.cpp, which handles the glutMainLoop (if the graphical part is enabled), graphics.cpp/h in which the rules concerning the graphical part are defined, and LV.cpp/h, in which the dynamics of the agent-based model is specified.
+*   [Testing](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing): in this folder the main functions of the program are tested.
+*   [Utilites](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/utilities): this folder contains several files that are required both for the numerical simulation and the agent-based model. In particular, we distinguish the reader.cpp/h files, in which the functions to read the data are defined, plotter.py, which handles the visualization of the trends, and utilities.h, which contains the parameter for the simulation.
+*   [Data](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data): this folder contains some examples of data regarding the dynamics of the model (growth rates in rates.txt, initial conditions in values.txt, interaction matrix in matrix.txt and carrying capacities in capacity.txt) with different number of species.
+*   [Output](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/output): this folder will contain the plots if SAVE_PLOT in utilies.h is set to true.
 
 ## Requirements
 ### C++
@@ -98,7 +95,6 @@ If they are not already installed, type:
 ```bash
 pip3 install numpy matplotlib
 ```
-
 
 ## Usage
 Clone the repository:
