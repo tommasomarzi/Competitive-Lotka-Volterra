@@ -11,7 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 def setup_parser():
     '''
-    Store the parameters of the setup.h header. 
+    Store the parameters of the setup.h header.
 
     Returns
     -------
@@ -28,6 +28,10 @@ def setup_parser():
                 matches = re.search('#define\s+([A-Za-z]\w+)\s+(.*\S+)', line)
                 if matches:
                     setup[matches[1]] = matches[2]
+    
+    if setup['ENABLE_OUTPUT'] == "false":
+        logging.warning('ENABLE_OUTPUT is set to false. If no output files are present in the chosen folder, an error will occur.')
+
     return setup
 
 
@@ -73,7 +77,7 @@ def models_vs_iter(path_ns, path_abm):
 
     if cut_plot:
         logging.warning('The capacity of at least one species is not calibrated properly (i.e. the density is much greater than one).\nThe plot will be cut.')
-    
+
     if n_species > 2:
         ax.legend(fontsize = 10)
     else:
@@ -90,7 +94,7 @@ def models_vs_iter(path_ns, path_abm):
 
 def two_species(file_data, model):
     '''
-    Two species case: plot the trend of the first species (x-axis) 
+    Two species case: plot the trend of the first species (x-axis)
     versus the trend of the second species (y-axis).
     
     Parameters
@@ -114,7 +118,7 @@ def two_species(file_data, model):
     ax.tick_params(axis='both', labelsize=14)
     ax.set_xlim([0,1.1])
     ax.set_ylim([0,1.1])
-    ax.grid(color = 'r', linestyle = '--', alpha = 0.4) 
+    ax.grid(color = 'r', linestyle = '--', alpha = 0.4)
 
     return fig
 
@@ -146,7 +150,7 @@ def three_species(file_data, model):
     ax.set_zlabel('$x_3$', fontsize = 15)
     ax.tick_params(axis='both', labelsize=14)
     ax.tick_params(axis='z', labelsize=14)
-    ax.zaxis.set_rotate_label(False) 
+    ax.zaxis.set_rotate_label(False)
     ax.set_xlim([0,1])
     ax.set_ylim([0,1])
     ax.set_zlim([0,1])
@@ -178,12 +182,12 @@ def four_species(file_data, model):
     img = ax.scatter(file_data[:, 0], file_data[:, 1], file_data[:,2], s = 2, c=file_data[:, 3],
                      vmin = 0, vmax = 1, cmap=plt.viridis())
     cbar = fig.colorbar(img)
-    cbar.set_label(label = '$x_4$', rotation = 0, fontsize = 15) 
+    cbar.set_label(label = '$x_4$', rotation = 0, fontsize = 15)
     ax.view_init(10,40)
     ax.set_xlabel('$x_1$', fontsize = 15)
     ax.set_ylabel('$x_2$', fontsize = 15)
     ax.set_zlabel('$x_3$', fontsize = 15)
-    ax.zaxis.set_rotate_label(False) 
+    ax.zaxis.set_rotate_label(False)
     ax.set_xlim([0,1])
     ax.set_ylim([0,1])
     ax.set_zlim([0,1])
@@ -193,12 +197,12 @@ def four_species(file_data, model):
 
 def save_plot(figure, model, n_species, path = 'output/figure_'):
     '''
-    Save the plot with a specific path according to the model and the type of plot. 
+    Save the plot with a specific path according to the model and the type of plot.
 
     Parameters
     ----------
         figure : matplotlib.figure.Figure
-            Plot to be saved. 
+            Plot to be saved.
         model : str
             Model to plot. It can be ns (numerical simulation) or abm (agent-based model).
         n_species : int
@@ -244,7 +248,7 @@ def plot_handler():
 
             file_data = np.loadtxt(path)
 
-            if file_data.ndim > 1: 
+            if file_data.ndim > 1:
                 n_species = file_data.shape[1]
             else:
                 n_species = 1
@@ -260,7 +264,7 @@ def plot_handler():
                 if setup['SAVE_PLOT'] == "true":
                     save_plot(figure, model, n_species)
                 else:
-                    plt.show() 
+                    plt.show()
     
         if n_species > 4:
             logging.warning('A plot with more than four species is not supported.\nPlease set ENABLE_PLOT_NS and ENABLE_PLOT_ABM to false.')
