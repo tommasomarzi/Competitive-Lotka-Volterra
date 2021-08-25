@@ -1,4 +1,6 @@
 # Competitive Lotka-Volterra 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/63c82d95783e4614b38be1e54fc11008)](https://www.codacy.com/gh/tommasomarzi/Competitive-Lotka-Volterra/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tommasomarzi/Competitive-Lotka-Volterra&amp;utm_campaign=Badge_Grade)
+
 The aim of this project is to calibrate an Agent-Based model representing a competitive N-species Lotka-Volterra model with its numerical solution (performed with a [Runge-Kutta 4 algorithm](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method)).
 
 Jump to a section:
@@ -35,7 +37,7 @@ An Agent-Based model is realized by considering a *n*x*n* grid in which the indi
     </CENTER>
     </p>
 
-where *K<sub>i</sub>* is the carrying capacity of the species *i* (i.e. maximum number that the population can reach).
+    where *K<sub>i</sub>* is the carrying capacity of the species *i* (i.e. maximum number that the population can reach).
 
 2.  then for each iteration we pick a cell:
     *   if it is empty, an individual of a certain species is created with a probability given by:
