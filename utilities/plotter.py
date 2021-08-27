@@ -1,5 +1,5 @@
-'''! @file plotter.py
-     @brief Define the functions to plot the results of the simulation.
+'''!@file plotter.py
+    @brief Define the functions to plot the results of the simulation.
 '''
 
 import numpy as np
@@ -127,7 +127,7 @@ def two_species(file_data, model):
     '''
     Two species case: plot the trend of the first species (x-axis)
     versus the trend of the second species (y-axis).
-    
+
     Parameters
     ----------
         file_data : numpy.ndarray
@@ -185,7 +185,7 @@ def three_species(file_data, model):
     ax.set_xlim([0,1])
     ax.set_ylim([0,1])
     ax.set_zlim([0,1])
-    
+
     return fig
 
 
@@ -207,7 +207,7 @@ def four_species(file_data, model):
         fig : matplotlib.figure.Figure
             Plot of the trajectory in the four-species space.
     '''
-    
+
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(projection='3d')
     img = ax.scatter(file_data[:, 0], file_data[:, 1], file_data[:,2], s = 2, c=file_data[:, 3],
@@ -222,7 +222,7 @@ def four_species(file_data, model):
     ax.set_xlim([0,1])
     ax.set_ylim([0,1])
     ax.set_zlim([0,1])
-    
+
     return fig
 
 
@@ -251,8 +251,8 @@ def plot_choice(file_data, model, n_species):
         figure = three_species(file_data, model)
     elif n_species == 4:
         figure = four_species(file_data, model)
-    
-    return figure   
+
+    return figure
 
 
 
@@ -271,7 +271,7 @@ def save_plot(figure, model, n_species, path = 'output/figure_'):
         path : str
             Path where to save the plot. Default is in "output/figure_".
     '''
-    
+
     if model == "both":
         figure.savefig(path + 'comparison_' + str(n_species) + '_species.png', bbox_inches="tight")
     else:
@@ -307,13 +307,13 @@ def plot_handler():
                 n_species = file_data.shape[1]
             else:
                 n_species = 1
-            
+
             if (n_species > 1 and n_species < 5):
                 figure = plot_choice(file_data, model, n_species)
                 if setup['SAVE_PLOT'] == "true":
                     save_plot(figure, model, n_species)
                 else:
-                    plt.show() 
+                    plt.show()
 
         if n_species > 4:
             logging.warning('A plot with more than four species is not supported.\nPlease set ENABLE_PLOT_NS and ENABLE_PLOT_ABM to false.')
