@@ -421,7 +421,7 @@ void LV::initializer_fill()
  */
 void LV::evolve() 
 {
-    int result, destination;
+    int result;
     int x = rand() % rows;
     int y = rand() % columns;
     result = neighborhood(x, y);
@@ -431,6 +431,7 @@ void LV::evolve()
     }
     else 
     {
+        int destination;
         int shift = result - (int(values_zero.size()) + 1);
         bool birth;
         if(shift > 99)
