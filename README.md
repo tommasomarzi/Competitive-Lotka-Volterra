@@ -120,10 +120,14 @@ Once the simulation has been performed, the output files of the two models can b
 
 ### Testing
 The testing is performed with the [Catch2](https://github.com/catchorg/Catch2/tree/v2.x) framework: you do not have to install anything since it is a [single-header file](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/testing/catch.hpp) that is already present in the [testing folder](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing) to avoid path conflicts.
+
 The testing can be done by typing (the flag '-s' silences the output of make, but it is not strictly necessary):
 ```bash
 make test -s
 ```
+**WARNING**: before starting the testing please set the DEBUG_MODE variable in the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) file to true in order to fix the seed of the sequence of random numbers and ensure the reproducibility of the results of the agent-based model test (a seed cannot be set specifically for the test as it would conflict with that of the model).
+Otherwise, the tests will still be performed and a warning message will appear on the shell.
+
 
 ## Documentation
 The documentation can be realized with [doxygen](https://www.doxygen.nl/index.html). 
