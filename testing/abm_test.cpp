@@ -48,6 +48,12 @@ class LV_Fixture
         n_species = simulation->values_zero.size();
         row = simulation->rows;
         col = simulation->columns;
+
+        if(!DEBUG_MODE)
+        {
+            cout<<"WARNING: the program is running in normal mode."<<endl;
+            cout<<"Please set the DEBUG_MODE variable of the setup.h file to true in order to fix the srand seed."<<endl<<endl;
+        }
     }
 
     vector<int> pres_fill() 
