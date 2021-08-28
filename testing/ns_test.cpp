@@ -5,6 +5,7 @@
 
 SCENARIO("Vector operations","[vector]")
 {
+    srand(1);
     GIVEN("a vector with a certain shape and a scalar value")
     {
         int size = (rand() % 10) + 1;
