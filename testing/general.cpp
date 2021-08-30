@@ -1,5 +1,9 @@
 #include "general.h"
 
+
+/*
+Check that the vectors containing the parameters obtained from the data folder are built properly.
+*/
 void check_input(vector<double> values, vector<vector<double>> interaction, vector<double> rates, vector<double> capacity)
 {
     int n_species = values.size();
