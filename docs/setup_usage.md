@@ -36,7 +36,9 @@ Therefore, it is required not to overturn the original structure of the file in 
 
 *   **folder**:                           name of the folder in the [data folder](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data) which contains the required parameters (rates.txt, values.txt, matrix.txt and capacity.txt) and that will contain the output files (output_ns.txt and output_abm.txt).
 
-*   **N_SIM_TEST**:                       number of times that the agent-based model methods are tested.
+*   **N_ABM_TEST**:                       number of times that the agent-based model methods are tested.
+
+*   **N_NS_TEST**:                        number of iterations in the testing of the numerical simulation algorithm.
 
 *   **DEBUG_MODE**:                       if it is true, it will fix the seed of the random number generator to a constant value.
 
