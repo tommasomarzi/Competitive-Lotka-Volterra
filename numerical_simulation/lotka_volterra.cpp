@@ -97,7 +97,7 @@ void compute_fields(vector<double> values, vector<double> rate, vector<vector<do
 
 /**
  * Given the values x at the time t_0, the Runge-Kutta 4 algorithm allows to obtain the values at the time t_0 + h,
-   where h is the time increment. This iterative algorithm commits an error of the order of h^4.
+   where h is the time increment. This iterative algorithm commits a global error of the order of h^4.
  * @param values vector containing the current values of all the species x(t_0).
  * @param rate  vector containing the growth rates.
  * @param interaction interaction matrix.
