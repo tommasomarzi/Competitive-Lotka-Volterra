@@ -2,6 +2,11 @@
 #include "catch.hpp"
 #include <iostream>
 
+
+/*
+Friend class of LV.
+Its methods allow to call the methods of LV.
+*/
 class LV_Fixture
 {
     protected:
@@ -99,9 +104,15 @@ class LV_Fixture
 };
 
 
+/*
+Test the methods of the LV class of the agent based model.
+
+The parameter N_ABM_TEST (defined in the setup.h file) represents the number of times that the methods
+of the LV class are tested.
+*/
 TEST_CASE_METHOD(LV_Fixture, "Test LV class methods") 
 {
-    for(int n_sim = 0; n_sim < N_SIM_TEST; n_sim++)
+    for(int n_sim = 0; n_sim < N_ABM_TEST; n_sim++)
     {
         int result;   
         int x;
