@@ -6,6 +6,15 @@
 
 LV *simulation;
 
+/**
+ * Handle the main loop of the agent-based model.
+ *
+ * The parameters are needed for the glutInit call (check https://www.opengl.org/resources/libraries/glut/spec3/node10.html)
+   even if in this context they are not used.
+ * @param argc number of strings in the command line.
+ * @param argv array containing the strings in the command line.
+ * @return 0 if the simulation was successful.
+ */
 int main(int argc, char **argv)
 {  
 	simulation = new LV(n_rows, n_cols);

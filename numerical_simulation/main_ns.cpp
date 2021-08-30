@@ -6,6 +6,12 @@
 #include "../utilities/reader.cpp"
 #include "../testing/general.cpp"
 
+
+/**
+ * Hanlde the main cycle of the numerical simulation, reading the parameters from the files and managing the output.
+ * If the plots are enabled, it calls plotter.py.
+ * @return 0 if the simulation was successful
+ */
 int main()
 {
     ofstream toplot;
