@@ -4,7 +4,7 @@ CXXFLAGS += -std=c++11
 dir = testing
 abm = agent_based_model
 
-all: run clean
+all: check run clean
 .PHONY: all
 
 run: abm_test ns_test
@@ -18,3 +18,6 @@ ns_test: $(dir)/ns_test.cpp
 
 clean:
 	@rm abm_test ns_test
+
+check:
+	@rm -f abm_test ns_test
