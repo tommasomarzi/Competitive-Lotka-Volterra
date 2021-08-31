@@ -9,6 +9,7 @@ Jump to a section:
 *   [Structure of the code](#Structure-of-the-code)
 *   [Requirements](#Requirements)
 *   [Usage](#Usage)
+*   [Testing](#Testing)
 *   [Documentation](#Documentation)
 
 ## The theoretical model
@@ -65,12 +66,13 @@ The simulation evolves up to the chosen number of iterations (check the [setup_u
 
 ## Structure of the code
 The code is structured in the following folders:
-*   [Numerical simulation](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/numerical_simulation): in this folder the numerical solution of the competitive Lotka-Volterra model is computed through the RK4 algorithm. In particular, main_ns.cpp handles the main loop and it calls the algorithm and the model that are present in lotka_volterra.cpp/h files.
-*   [Agent-based model](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/agent_based_model): in this folder three blocks of files are present, i.e. main_abm.cpp, which handles the glutMainLoop (if the graphical part is enabled), graphics.cpp/h in which the rules concerning the graphical part are defined, and LV.cpp/h, in which the dynamics of the agent-based model is specified.
-*   [Testing](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing): in this folder the main functions of the program are tested.
-*   [Utilites](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/utilities): this folder contains several files that are required both for the numerical simulation and the agent-based model. In particular, we distinguish the reader.cpp/h files, in which the functions to read the data are defined, plotter.py, which handles the visualization of the trends, and utilities.h, which contains the parameter for the simulation.
-*   [Data](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data): this folder contains some examples of data regarding the dynamics of the model (growth rates in rates.txt, initial conditions in values.txt, interaction matrix in matrix.txt and carrying capacities in capacity.txt) with different number of species.
-*   [Output](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/output): this folder will contain the plots if SAVE_PLOT in utilies.h is set to true.
+*   [agent_based_model](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/agent_based_model): in this folder three blocks of files are present, i.e. main_abm.cpp, which handles the glutMainLoop (if the graphical part is enabled), graphics.cpp/h in which the rules concerning the graphical part are defined, and LV.cpp/h, in which the dynamics of the agent-based model is specified.
+*   [data](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/data): this folder contains some examples of data regarding the dynamics of the model (growth rates in rates.txt, initial conditions in values.txt, interaction matrix in matrix.txt and carrying capacities in capacity.txt) with different number of species. It is possible to add new configuration files following this format.
+*   [docs](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/docs): this folder contains the setup_usage.md file, which is a markdown file that explains the usage of the parameters in the setup.h file, and a folder with a configuration file for the doxygen documentation. In particular, if this latter is realized a new folder containing the documentation files named html will be created.
+*   [numerical_simulation](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/numerical_simulation): in this folder the numerical solution of the competitive Lotka-Volterra model is computed through the RK4 algorithm. In particular, main_ns.cpp handles the main loop and it calls the algorithm and the model that are present in lotka_volterra.cpp/h files.
+*   [output](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/output): this folder will contain the plots if SAVE_PLOT in utilies.h is set to true.
+*   [testing](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing): in this folder the main functions of the program are tested using the [Catch2](https://github.com/catchorg/Catch2/tree/v2.x) framework.
+*   [utilites](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/utilities): this folder contains several files that are required both for the numerical simulation and the agent-based model. In particular, we distinguish the reader.cpp/h files, in which the functions to read the data from file are defined, plotter.py, which handles the visualization of the trends, and utilities.h, which contains the parameters for the simulation.
 
 ## Requirements
 ### C++
@@ -95,7 +97,7 @@ For the python script the following libraries are required:
 
 If they are not already installed, type:
 ```bash
-pip3 install numpy matplotlib
+pip3 install numpy>=1.20.0 matplotlib>=3.3.4
 ```
 
 ## Usage
@@ -118,7 +120,7 @@ Once the simulation has been performed, the output files of the two models can b
 /usr/bin/python3 utilities/plotter.py
 ```
 
-### Testing
+## Testing
 The testing is performed with the [Catch2](https://github.com/catchorg/Catch2/tree/v2.x) framework: you do not have to install anything since it is a [single-header file](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/testing/catch.hpp) that is already present in the [testing folder](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing) to avoid path conflicts.
 
 The testing can be done by typing (the flag '-s' silences the output of make, but it is not strictly necessary):
@@ -127,7 +129,6 @@ make test -s
 ```
 **WARNING**: before starting the testing please set the DEBUG_MODE variable in the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) file to true in order to fix the seed of the sequence of random numbers and ensure the reproducibility of the results of the agent-based model test (a seed cannot be set specifically for the test as it would conflict with that of the model).
 Otherwise, the tests will still be performed and a warning message will appear on the shell.
-
 
 ## Documentation
 The documentation can be realized with [doxygen](https://www.doxygen.nl/index.html). 
