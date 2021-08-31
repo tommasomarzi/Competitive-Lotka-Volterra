@@ -30,7 +30,6 @@ void create_window(void)
  */
 void reshape(int width = w_width, int height = w_height) 
 {
-	cout<<"hey"<<endl;
 	glViewport(0, 0, width, height);          	  // transformation from device coords to window coords
 	glMatrixMode(GL_PROJECTION);                  // Select The Projection Matrix
 	glLoadIdentity();                             // Reset  The Projection Matrix
