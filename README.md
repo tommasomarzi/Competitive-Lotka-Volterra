@@ -115,7 +115,7 @@ Once the configuration in the [setup.h](https://github.com/tommasomarzi/Competit
 ```bash
 make model -s
 ```
-Once the simulation has been performed, the output files of the two models can be found in the folder with the parameters chosen in setup.h. If you want to run the plots directly from those files, type:
+Once the simulation has been performed, the output files of the two models can be found in the folder with the parameters chosen in setup.h. If the variable ENABLE_PLOT has not been set to true, you can realize the plots from those files once the simulation is finished by typing:
 ```bash
 /usr/bin/python3 utilities/plotter.py
 ```
@@ -149,3 +149,4 @@ After some processing time, a folder named html which contains a bunch of files 
 ```bash
 firefox docs/html/index.html 
 ```
+The testing folder is excluded from the doxygen documentation (simple docstrings are present in the code).
