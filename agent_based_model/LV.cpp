@@ -1,5 +1,7 @@
 /*! \file LV.cpp
-    \brief Define the agent-based model class. 
+    \brief Define the methods of the agent-based model class.
+
+    The doxygen documentation related to these methods can be found in the Classes section.
 */
 
 #include "LV.h"
@@ -9,8 +11,8 @@
 
 /**
  * Instantiate the agent-based model in a grid. 
- * @param rows_ The number of cells in the x-axis
- * @param columns_ The number of cells in the y-axis
+ * @param rows_ The number of cells in the x-axis.
+ * @param columns_ The number of cells in the y-axis.
  */
 LV::LV(const int rows_, const int columns_): rows(rows_), columns(columns_) 
 {
@@ -257,6 +259,16 @@ int LV::filler(vector<int> presences)
  * @param empty_cells spatial information on the occupation of the neighborhood.
  * @param species species which occupies the cell. 
  * @return value of the cell at the next iteration.
+ *
+ * The returned value can be:
+ *
+ * 1) -1 (the indivual dies)
+ *
+ * 2) the current species (nothing happens)
+ *
+ * 3) the number of species + 1 + cell, where cell is the index of an empty cell (movement)
+ *
+ * 4) the number of species + 101 + cell, where cell is the index of an empty cell (birth)
  */
 int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
 {    
@@ -269,11 +281,11 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
         prob += presences[i]/8.0;
         if(rv < prob)
         {
-            if((i - 1) == species)               //iteration[i][i] == 1
+            if((i - 1) == species)              //interation with the same species A (-> death)
             {
-               result = -1;                    // A + A -> 0 + A
+               result = -1;                     // A + A -> 0 + A
             }
-            else if(i == 0)                     // A + 0 -> move/birth
+            else if(i == 0)                     //interaction with an empty cell
             {
                 int count_empty = 1;
                 for(int i = 0; i < empty_cells.size(); i++)
@@ -284,56 +296,57 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
                     }
                 }
                 int cell = random_walk(empty_cells, count_empty);
-                if(ENABLE_BIRTHS)
+
+                if(ENABLE_BIRTHS)                       //possible birth/movement
                 {
                     double den  = count_empty*rates[species] + (8-count_empty);
                     rv = (double)rand() / RAND_MAX;
 
-                    if(rv < (count_empty*rates[species]/den))
+                    if(rv < (count_empty*rates[species]/den))             //possible birth
                     {
-                        if(cell == 9)
+                        if(cell == 9)                                     //nothing happens
                         {
-                            result = species;                              // A + 0 -> A + 0
+                            result = species;                             // A + 0 -> A + 0
                         }
-                        else
+                        else                                              //birth
                         {
                             result = values_zero.size() + cell + 101;     // A + 0 -> A + A
                         }
                     }
-                    else
+                    else                                                  //possible movement
                     {
-                        if(cell == 9)
+                        if(cell == 9)                                     //nothing happens
                         {
-                            result = species;                            // A + 0 -> A + 0
+                            result = species;                             // A + 0 -> A + 0
                         }
-                        else
+                        else                                              //movement
                         {
-                            result = values_zero.size() + cell + 1;     // A + 0 -> 0 + A
+                            result = values_zero.size() + cell + 1;       // A + 0 -> 0 + A
                         }
                     }
-                    }
-                else
+                }
+                else                                    //possible movement
                 {
-                    if(cell == 9)
+                    if(cell == 9)                                         //nothing happens
                     {
-                        result = species;                            // A + 0 -> A + 0
+                        result = species;                                 // A + 0 -> A + 0
                     }
-                    else
+                    else                                                  //movement
                     {
-                        result = values_zero.size() + cell + 1;     // A + 0 -> 0 + A
+                        result = values_zero.size() + cell + 1;           // A + 0 -> 0 + A
                     }
                 }
             }
-            else
+            else                                //interaction with another species B
             {
                 rv = (double)rand() / RAND_MAX;
-                if(rv < interaction[species][i-1])
+                if(rv < interaction[species][i-1])                        //death of the individual
                 {
-                    result = -1;                 //A + X -> 0 + X
+                    result = -1;                                          //A + B -> 0 + B
                 }
-                else
+                else                                                      //nothing happens
                 {
-                    result = species;             //A + X -> A + X
+                    result = species;                                     //A + B -> A + B
                 }
             }
             break;
@@ -425,21 +438,21 @@ void LV::evolve()
     int x = rand() % rows;
     int y = rand() % columns;
     result = neighborhood(x, y);
-    if((int(values_zero.size()) + 1) > result)
+    if(result < (int(values_zero.size()) + 1))              //no shift -> new value of the cell
     {
         grid[x][y] = result;
     }
-    else 
+    else                                                    //shift -> birth/movement
     {
         int destination;
         int shift = result - (int(values_zero.size()) + 1);
         bool birth;
-        if(shift > 99)
+        if(shift > 99)                                      //shift > 99 -> birth
         {
             birth = true;
             shift -= 100;
         }
-        else
+        else                                                //shift between 0 and 9 -> movement
         {
             birth = false;
         }
