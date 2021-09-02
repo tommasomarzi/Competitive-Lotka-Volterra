@@ -76,23 +76,20 @@ class LV_Fixture
         return pres;
     }
 
-    vector<bool> neighborhood_is_empty() 
+    vector<bool> neighborhood_is_empty(vector<int> presences)
     {
         vector<bool> empty_cells(9,false);
-        int rv;
-        for(int i = 0; i < empty_cells.size(); i++) 
+        empty_cells[4] = false;
+        int occupied_cells = 8 - presences[0];
+        for(int i = 0; i < occupied_cells; i++)
         {
-            if(i == 4)
+            if(i < 4)
             {
-                continue;
+                empty_cells[i] = false;
             }
             else
             {
-                rv = (double)rand() / RAND_MAX;
-                if(rv < 0.5)
-                {
-                    empty_cells[i] = true;
-                }
+                empty_cells[i+1] = false;
             }
         }
         return empty_cells;
@@ -119,22 +116,39 @@ TEST_CASE_METHOD(LV_Fixture, "Test LV class methods")
         int y;
         bool check;
 
-        
-        //LV::neighborhood(int,int)
+
+        /*
+        LV::neighborhood(int,int)
+
+        verify that the function returns a valid value,
+        i.e. it is a value greater than -1 (we have to take into account of the movements
+        and possible births).
+        */
         x = rand() % row;
         y = rand() % col;
         result = test_neighborhood(x,y);
         REQUIRE(result > -2);
-        REQUIRE(result < n_species);
 
 
-        //LV::normalizer()
+        /*
+        LV::normalizer()
+
+        verify that the function returns a valid value,
+        i.e. it is -1 (empty cell) or a value corresponding to a species (between 0 and n_species - 1).
+        */
         result = test_normalizer();
         REQUIRE(result > -2);
         REQUIRE(result < n_species);
 
 
-        //LV::filler(vector<int>)
+        /*
+        LV::filler(vector<int>)
+
+        once a vector representing the occupation of the neighborhood is defined,
+        verify that the result (i.e. the value of the empty cell at the next iteration) is a valid value, i.e.:
+        1) it is -1 (empty cell) or a value corresponding to a species (between 0 and n_species - 1)
+        2) it can be generated from the neighborhood
+        */
         vector<int> presences = pres_fill();
         result = test_filler(presences);
         check = false;
@@ -154,50 +168,61 @@ TEST_CASE_METHOD(LV_Fixture, "Test LV class methods")
         REQUIRE(check == true);
 
 
-        //LV::normalizer(vector<int>, vector<bool>, int)
+        /*
+        LV::normalizer(vector<int>, vector<bool>, int)
+
+        once a boolean vector representing the spatial occupation of the neighborhood is defined,
+        verify that the result (i.e. the value of the empty cell at the next iteration) is a valid value, i.e.:
+        1) it is -1 (empty cell) after the death of the individual
+        2) it remains the same value (no interaction)
+        3) it moves to an empty cell
+        4) if the births are enabled, it generates a new individual in the neighrborhood
+        */
         int species = rand() % n_species;
-        vector<bool> empty_cells = neighborhood_is_empty();
+        vector<bool> empty_cells = neighborhood_is_empty(presences);
         check = false;
 
         result = test_normalizer(presences, empty_cells, species);
-        for(int i = 0; i < presences.size(); i++)
-        {
-            if(presences[i] == 0)
-            {
-                continue;
-            }
-            else if(result == (i - 1))
-            {
-                check = true;
-            }
-        }
-        if(result == species)
+
+        if(result == -1)                                                //A + X -> 0 + X
         {
             check = true;
         }
-        if(check == false)
+        else if(result == species)                                      //A + 0 -> A + 0
         {
-            if((result > n_species) && (result < (n_species + 10)))
+            check = true;
+        }
+        else if((result > n_species) && (result < (n_species + 10)))    //A + 0 -> 0 + A
+        {
+            check = true;
+            int to_cell = result - (n_species + 1);
+            REQUIRE(empty_cells[to_cell] == true);
+        }
+        else if(ENABLE_BIRTHS)                                          //A + 0 -> A + A
+        {
+            if((result > (n_species + 100)) && (result < (n_species + 110)))
             {
                 check = true;
+                int to_cell = result - (n_species + 1 + 100);
+                REQUIRE(empty_cells[to_cell] == true);
             }
         }
-        if(ENABLE_BIRTHS)
-        {
-            if(check == false)
-            {
-                if((result > (n_species + 100)) && (result < (n_species + 110)))
-                {
-                    check = true;
-                }
-            }
-        }
+
         REQUIRE(result > -2);
         REQUIRE(check == true);
 
 
-        //LV::random_walk(vector<bool>, int)
-        int count_empty = 1;
+        /*
+        LV::random_walk(vector<bool>, int)
+
+        once we verified that there is at least one empty cell in the neighborhood,
+        check that the result is a valid value, i.e.:
+        1) it is a valid value (between 0 and 9, different from 4)
+        2) if the individual moves to an empty cell (i.e. result != 9)
+        in the case in which there are no empty cells, empty the cell 0 and (if the individual moves)
+        verify that it moves to that cell
+        */
+        int count_empty = 0;
         for(int i = 0; i < empty_cells.size(); i++)
         {
             if(empty_cells[i] == true)
@@ -205,12 +230,21 @@ TEST_CASE_METHOD(LV_Fixture, "Test LV class methods")
                 count_empty++;
             }
         }
+        if(count_empty == 0)
+        {
+            empty_cells[0] = true;
+        }
+
         result = test_random_walk(empty_cells, count_empty);
         REQUIRE(result > -1);
         REQUIRE(result < 10);
         if(result != 9)
         {
             REQUIRE(empty_cells[result] == true);
+            if(count_empty == 0)
+            {
+                REQUIRE(result == 0);
+            }
         }
     }
 }
