@@ -3,6 +3,10 @@
 
 /*
 Check that the vectors containing the parameters obtained from the data folder are built properly.
+In particular, verify that:
+1) the files are read properly, i.e. the number of species is greater than zero
+2) the files are built properly, i.e. there is correspondence between the dimensions of the vectors
+and of the matrix
 */
 void check_input(vector<double> values, vector<vector<double>> interaction, vector<double> rates, vector<double> capacity)
 {

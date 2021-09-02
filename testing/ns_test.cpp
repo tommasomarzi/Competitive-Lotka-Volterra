@@ -56,6 +56,10 @@ As the theory regarding the RK4 algorithm explains, the local truncation error i
 of O(h^5) and it generates a global truncation error of the order of O(h^4).
 Therefore, it is required that those error are less than h^4 and h^3 respectively.
 
+Since this algorithm requires high precision and a high number of digits, the test is performed
+in the 1-species case, which is analitically solvable and therefore it allows the comparison
+with the exact solution.
+
 The parameter N_NS_TEST (defined in the setup.h file) represents the number of iteration of the model.
 */
 TEST_CASE("Runge-Kutta for Lotka-Volterra", "[numerical]")
