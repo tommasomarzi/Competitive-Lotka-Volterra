@@ -1,7 +1,7 @@
 # Competitive Lotka-Volterra 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/63c82d95783e4614b38be1e54fc11008)](https://www.codacy.com/gh/tommasomarzi/Competitive-Lotka-Volterra/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tommasomarzi/Competitive-Lotka-Volterra&amp;utm_campaign=Badge_Grade)
 
-The aim of this project is to calibrate an Agent-Based model representing a competitive N-species Lotka-Volterra model with its numerical solution (performed with a [Runge-Kutta 4 algorithm](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method)).
+The aim of this project is to calibrate an Agent-Based model representing a competitive N-species Lotka-Volterra model with its numerical solution.
 
 Jump to a section:
 *   [Theoretical model](#The-theoretical-model)
@@ -25,6 +25,8 @@ In particular, the evolution of each species *i* normalized with respect to its 
 where *r<sub>i</sub>* > 0 is the growth rate of the species *i* and *&alpha;<sub>ij</sub>* >= 0 is the element of the interaction matrix *&alpha;* which quantifies the effect of the species *j* on the species *i* (conventionally *&alpha;<sub>ii</sub>* = 1).
 The evolution of each species is bounded between 0 and 1 with respect to its own carrying capacity.
 
+This model is numerically solved by using the [Runge-Kutta 4 algorithm](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method)).
+
 For references regarding the chaotic dynamics or attractor phenomena that this model can exhibit, check the [Wikipedia page](https://en.wikipedia.org/wiki/Competitive_Lotka%E2%80%93Volterra_equations#Possible_dynamics).
 
 ## The Agent-Based model
@@ -32,7 +34,7 @@ An Agent-Based model is realized by considering a *n*x*n* grid in which the indi
 
 1.  at the beginning, each cell of the grid is initialized with an individual belonging to a species *i* with a probability:
 
-    <p>
+    <p align="center">
     <CENTER>
     <img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;p_i&space;=&space;\frac{K_ix_i^0}{n^2}" title="\bg_white p_i = \frac{K_i\,x_i^0}{n^2}" />
     </CENTER>
@@ -43,24 +45,32 @@ An Agent-Based model is realized by considering a *n*x*n* grid in which the indi
 2.  then for each iteration we pick a cell:
     *   if it is empty, an individual of a certain species is created with a probability given by:
 
-        <p>
+        <p align="center">
         <CENTER>
         <img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;p_i&space;=&space;\frac{r_ig_i}{Z}" title="\bg_white p_i = \frac{r_ig_i}{Z}" />
         </CENTER>
         </p>
 
-    where *g<sub>i</sub>* is the occupation number in the eight-cells neighborhood and *Z* is a normalization constant (the rate associated to the empty cells *r<sub>0</sub>* is fixed to one and it leaves the cell unoccupied).
+        where *g<sub>i</sub>* is the occupation number in the eight-cells neighborhood and *Z* is a normalization constant (the rate associated to the empty cells *r<sub>0</sub>* is fixed to one and it leaves the cell unoccupied).
 
     *   if it is occupied, it interact with one kind of the neighborhood cells according to the occupation number:
-    
-        <p>
+
+        <p align="center">
         <CENTER>
         <img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;p_j&space;=&space;\frac{g_j}{8}" title="\bg_white p_j = \frac{g_j}{8}" />
         </CENTER>
         </p>
 
-    If *j* = 0 then the individual can move to an empty cell (or it stays in the current one) with a uniform probability.
-    If *j* = 1, ..., N then the individual in the considered cell dies with a probability *&alpha;<sub>ij</sub>*. Therefore, we require that *&alpha;<sub>ij</sub>* <= 1.
+        If *j* = 1, ..., N then the individual in the considered cell dies with a probability *&alpha;<sub>ij</sub>*. Therefore, we require that *&alpha;<sub>ij</sub>* <= 1.
+        If *j* = 0 then the individual can move to an empty cell (or it stays in the current one) with a uniform probability. If the parameter ENABLE_BIRTHS in the [setup.h](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/utilities/setup.h) is set to true, the individual has the opportunity to generate another individual in an empty cell with a probability:
+
+        <p align="center">
+        <CENTER>
+        <img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;p_i&space;=&space;\frac{r_ig_0}{r_ig_0&space;&plus;&space;(8-g_0)}" title="\bg_white p_i = \frac{r_ig_0}{r_ig_0 + (8-g_0)}" />
+        </CENTER>
+        </p>
+
+        If this event does not occur, the individual can move according to an uniform probability.
 
 The simulation evolves up to the chosen number of iterations (check the [setup_usage](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/docs/setup_usage.md) file).
 
