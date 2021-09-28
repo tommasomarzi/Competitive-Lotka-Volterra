@@ -150,6 +150,11 @@ def two_species(file_data, model):
     ax.set_xlim([0,1.1])
     ax.set_ylim([0,1.1])
     ax.grid(color = 'r', linestyle = '--', alpha = 0.4)
+    if model == "ns":
+        name = "numerical simulation"
+    else:
+        name = "agent-based model"
+    fig.suptitle("Trajectory in the two species space ({})".format(name))
 
     return fig
 
@@ -185,6 +190,11 @@ def three_species(file_data, model):
     ax.set_xlim([0,1])
     ax.set_ylim([0,1])
     ax.set_zlim([0,1])
+    if model == "ns":
+        name = "numerical simulation"
+    else:
+        name = "agent-based model"
+    fig.suptitle("Trajectory in the three species space ({})".format(name))
 
     return fig
 
@@ -222,6 +232,11 @@ def four_species(file_data, model):
     ax.set_xlim([0,1])
     ax.set_ylim([0,1])
     ax.set_zlim([0,1])
+    if model == "ns":
+        name = "numerical simulation"
+    else:
+        name = "agent-based model"
+    fig.suptitle("Trajectory in the four species space ({})".format(name))
 
     return fig
 
