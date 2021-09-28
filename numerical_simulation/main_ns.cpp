@@ -4,7 +4,7 @@
 
 #include "lotka_volterra.cpp"
 #include "../utilities/reader.cpp"
-#include "../testing/general.cpp"
+#include "../utilities/general.cpp"
 
 
 /**

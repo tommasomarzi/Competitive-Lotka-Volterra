@@ -8,7 +8,7 @@
 #include <ctime>
 #include "../utilities/setup.h"
 #include "../utilities/reader.cpp"
-#include "../testing/general.cpp"
+#include "../utilities/general.cpp"
 
 /**
  * @brief Class to generate an agent-based model which evolves in a grid according to stochastic rules
