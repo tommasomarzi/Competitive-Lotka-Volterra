@@ -25,12 +25,34 @@ In particular, the evolution of each species *i* normalized with respect to its 
 where *r<sub>i</sub>* > 0 is the growth rate of the species *i* and *&alpha;<sub>ij</sub>* >= 0 is the element of the interaction matrix *&alpha;* which quantifies the effect of the species *j* on the species *i* (conventionally *&alpha;<sub>ii</sub>* = 1).
 The evolution of each species is bounded between 0 and 1 with respect to its own carrying capacity.
 
-This model is numerically solved by using the [Runge-Kutta 4 algorithm](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method)).
-
 For references regarding the chaotic dynamics or attractor phenomena that this model can exhibit, check the [Wikipedia page](https://en.wikipedia.org/wiki/Competitive_Lotka%E2%80%93Volterra_equations#Possible_dynamics).
 
+This model is numerically solved by using the [Runge-Kutta 4 algorithm](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method), which allows to solve a general ordinary differential equation with known initial conditions ***x***( t<sub>0</sub> ) in the form:
+
+<p>
+<CENTER>
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;&space;&space;&space;&space;\frac{d\boldsymbol{x}}{dt}&space;=&space;\boldsymbol{f}(\boldsymbol{x}(t),t)" title="\bg_white \frac{d\boldsymbol{x}}{dt} = \boldsymbol{f}(\boldsymbol{x}(t),t)" />
+</CENTER>
+</p>
+
+In particular, the solution for a time increment *h* is:
+
+<p>
+<CENTER>
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;&space;&space;&space;&space;\boldsymbol{x}(t_0&space;&plus;&space;h&space;)&space;=&space;\boldsymbol{x}(t_0)&space;&plus;&space;\frac{h}{6}\left[\boldsymbol{F}_1&space;&plus;&space;2\boldsymbol{F}_2&space;&plus;&space;2\boldsymbol{F}_3&plus;\boldsymbol{F}_4&space;&space;&space;&space;&space;&space;&space;\right]" title="\bg_white \boldsymbol{x}(t_0 + h ) = \boldsymbol{x}(t_0) + \frac{h}{6}\left[\boldsymbol{F}_1 + 2\boldsymbol{F}_2 + 2\boldsymbol{F}_3+\boldsymbol{F}_4 \right]" />
+</CENTER>
+</p>
+
+where we introduced four auxiliary fields ***F<sub>1,2,3,4</sub>*** defined as:
+
+<p>
+<CENTER>
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;\bg_white&space;\begin{align*}&&space;\boldsymbol{F}_1&space;=&space;\boldsymbol{f}(\boldsymbol{x}(t_0),t_0)&space;\\&space;&&space;\boldsymbol{F}_2&space;=&space;\boldsymbol{f}\left(\boldsymbol{x}(t_0)&space;&plus;\frac{h}{2}\boldsymbol{F}_1,t_0&space;&plus;&space;\frac{h}{2}\right)&space;\\&space;&&space;\boldsymbol{F}_3&space;=&space;\boldsymbol{f}\left(\boldsymbol{x}(t_0)&space;&plus;\frac{h}{2}\boldsymbol{F}_2,t_0&space;&plus;&space;\frac{h}{2}\right)&space;\\&space;&&space;\boldsymbol{F}_4&space;=&space;\boldsymbol{f}\left(\boldsymbol{x}(t_0)&space;&plus;h\boldsymbol{F}_3,t_0&space;&plus;&space;h\right)&space;\end{align*}&space;" title="\bg_white \begin{align*}& \boldsymbol{F}_1 = \boldsymbol{f}(\boldsymbol{x}(t_0),t_0) \\ & \boldsymbol{F}_2 = \boldsymbol{f}\left(\boldsymbol{x}(t_0) +\frac{h}{2}\boldsymbol{F}_1,t_0 + \frac{h}{2}\right) \\ & \boldsymbol{F}_3 = \boldsymbol{f}\left(\boldsymbol{x}(t_0) +\frac{h}{2}\boldsymbol{F}_2,t_0 + \frac{h}{2}\right) \\ & \boldsymbol{F}_4 = \boldsymbol{f}\left(\boldsymbol{x}(t_0) +h\boldsymbol{F}_3,t_0 + h\right) \end{align*} " />
+</CENTER>
+</p>
+
 ## The Agent-Based model
-An Agent-Based model is realized by considering a *n*x*n* grid in which the individuals move and interact according to stochastic events based on the values of the parameters of the model. The rules are the following:
+An Agent-Based model is realized by considering a *n* x *n* grid in which the individuals move and interact according to stochastic events based on the values of the parameters of the model. The rules are the following:
 
 1.  at the beginning, each cell of the grid is initialized with an individual belonging to a species *i* with a probability:
 
@@ -129,6 +151,31 @@ Once the simulation has been performed, the output files of the two models can b
 ```bash
 /usr/bin/python3 utilities/plotter.py
 ```
+Otherwise, if ENABLE_PLOT is set to true the plots will be realized automatically.
+
+### Example
+Once the simulation has been run, if ENABLE_GRAPHICS is set to true the evolution of the grid will be shown on screen as follows:
+
+![](./docs/images_markdown/grid_example.png)
+
+in which the green cells represent the empty cells, while the yellow and the black cells represent the two species. These informations are shown on the shell as well as the chosen parameters and the help menu:
+
+![](./docs/images_markdown/menu_example.png)
+
+If ENABLE_GRAPHICS is set to false, only the chosen configuration will appear on the shell.
+
+In the presented case, the simulation is performed with the parameters reported in the [2-species_example](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/data/2-species_example) folder with an increment *h*=0.0003 and ENABLE_BIRTHS set to false. The simulation evolves up to 80000 iteration.
+The comparison of the trends of the two populations shows good agreement between the theoretical model and the agent-based model:
+
+![](./output/figure_comparison_2_species.png)
+
+In the numerical simulation, in the case of two species the system tends to a stable fixed point which can be easily computed by imposing the time-derivative of the species equal to zero. Therefore, the trajectory in the two-species plane tends to that fixed point:
+
+![](./output/figure_ns_2dim.png)
+
+On the other hand, the spatial information and the inner stochasticity of the agent-based model do not allow an exact stabilization of the populations. As a matter of fact, in this case the trajectory in the two-species plane follows a trend which deviates randomly from the one of the numerical solution and it ends up to fluctuate around the fixed point, creating a cloud:
+
+![](./output/figure_abm_2dim.png)
 
 ## Testing
 The testing is performed with the [Catch2](https://github.com/catchorg/Catch2/tree/v2.x) framework: you do not have to install anything since it is a [single-header file](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/blob/master/testing/catch.hpp) that is already present in the [testing folder](https://github.com/tommasomarzi/Competitive-Lotka-Volterra/tree/master/testing) to avoid path conflicts.
