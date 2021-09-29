@@ -60,7 +60,7 @@ double lotka_volterra(int index, vector<double> values, double rate, vector<doub
  * @param values vector containing the starting values of all the species of the previous field.
  * @param rate  vector containing the growth rates.
  * @param interaction interaction matrix.
- * @param fields vector containing the auxiliary fields.
+ * @param fields vector containing the auxiliary fields (check the README.md for an extendend explanation).
  * @param increment the time increment associated to the field.
  * @return vector containing the values of the computed field.
  */
@@ -82,7 +82,7 @@ vector<double> compute_fields(vector<double> values, vector<double> rate, vector
  * @param values vector containing the starting values of all the species of the previous field.
  * @param rate  vector containing the growth rates.
  * @param interaction interaction matrix.
- * @param fields vector containing the auxiliary fields.
+ * @param fields vector containing the auxiliary fields (check the README.md for an extendend explanation).
  */
 void compute_fields(vector<double> values, vector<double> rate, vector<vector<double>> interaction, vector<vector<double>> &fields)		
 {

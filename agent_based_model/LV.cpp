@@ -185,7 +185,7 @@ int LV::neighborhood(int x, int y)
             if (!(nb_x[i] == x && nb_y[j] == y)) 
             {
                 presences[grid[nb_x[i]][nb_y[j]] + 1]++;
-                if((grid[nb_x[i]][nb_y[j]] + 1) == 0)
+                if((grid[nb_x[i]][nb_y[j]]) == EMPTY_CELL)
                 {
                     empty_cells[i*3 + j] = true;
                 }
@@ -193,7 +193,7 @@ int LV::neighborhood(int x, int y)
 		}
 	}
 
-    if(grid[x][y] == -1)
+    if(grid[x][y] == EMPTY_CELL)
     {
         result = filler(presences);
     }
@@ -215,25 +215,25 @@ int LV::neighborhood(int x, int y)
 int LV::filler(vector<int> presences)
 {
     int result = -2;
-    double den = 0.0;
+    double normalization_factor = 0.0;
     double rv = (double)rand() / RAND_MAX;
     double prob = 0.0;
-    den += presences[0];
+    normalization_factor += presences[0];
 
     for(int i = 0; i < rates.size(); i++)  
     {
-        den += presences[i+1]*rates[i];
+        normalization_factor += presences[i+1]*rates[i];
     }
     
     for(int i = 0; i < (rates.size() + 1); i++)
     {
         if(i == 0)
         {
-            prob += presences[i]/den;
+            prob += presences[i]/normalization_factor;
         }
         else
         {
-            prob += presences[i]*rates[i-1]/den;
+            prob += presences[i]*rates[i-1]/normalization_factor;
         }
 
         if(rv < prob)
@@ -283,7 +283,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
         {
             if((i - 1) == species)              //interation with the same species A (-> death)
             {
-               result = -1;                     // A + A -> 0 + A
+               result = EMPTY_CELL;             // A + A -> 0 + A
             }
             else if(i == 0)                     //interaction with an empty cell
             {
@@ -299,12 +299,12 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
 
                 if(ENABLE_BIRTHS)                       //possible birth/movement
                 {
-                    double den  = count_empty*rates[species] + (8-count_empty);
+                    double normalization_factor  = count_empty*rates[species] + (8-count_empty);
                     rv = (double)rand() / RAND_MAX;
 
-                    if(rv < (count_empty*rates[species]/den))             //possible birth
+                    if(rv < (count_empty*rates[species]/normalization_factor))             //possible birth
                     {
-                        if(cell == 9)                                     //nothing happens
+                        if(cell == NO_ACTIONS)                            //nothing happens
                         {
                             result = species;                             // A + 0 -> A + 0
                         }
@@ -315,7 +315,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
                     }
                     else                                                  //possible movement
                     {
-                        if(cell == 9)                                     //nothing happens
+                        if(cell == NO_ACTIONS)                            //nothing happens
                         {
                             result = species;                             // A + 0 -> A + 0
                         }
@@ -327,7 +327,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
                 }
                 else                                    //possible movement
                 {
-                    if(cell == 9)                                         //nothing happens
+                    if(cell == NO_ACTIONS)                                //nothing happens
                     {
                         result = species;                                 // A + 0 -> A + 0
                     }
@@ -342,7 +342,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
                 rv = (double)rand() / RAND_MAX;
                 if(rv < interaction[species][i-1])                        //death of the individual
                 {
-                    result = -1;                                          //A + B -> 0 + B
+                    result = EMPTY_CELL;                                  //A + B -> 0 + B
                 }
                 else                                                      //nothing happens
                 {
@@ -365,7 +365,7 @@ int LV::normalizer(vector<int> presences, vector<bool> empty_cells, int species)
  */
 int LV::random_walk(vector<bool> empty_cells, int count_empty)
 {
-    int result = 9;
+    int result = NO_ACTIONS;
     double rv = (double)rand() / RAND_MAX;
     double prob = 1.0/count_empty;
     for(int i = 0; i < empty_cells.size(); i++)
@@ -394,7 +394,7 @@ int LV::random_walk(vector<bool> empty_cells, int count_empty)
  */
 int LV::normalizer()
 {
-    int result = -1;
+    int result = EMPTY_CELL;
     int cells = rows*columns;
     double rv = (double)rand() / RAND_MAX;
     double prob = 0.0;
@@ -452,7 +452,7 @@ void LV::evolve()
             birth = true;
             shift -= 100;
         }
-        else                                                //shift between 0 and 9 -> movement
+        else                                                //shift between 0 and 8 -> movement
         {
             birth = false;
         }
@@ -497,9 +497,9 @@ void LV::evolve()
         }
         if(!birth)
         {
-            grid[x][y] = -1;
+            grid[x][y] = EMPTY_CELL;
         }
-        if(destination != -1)
+        if(destination != EMPTY_CELL)
         {            
             cout<<"ERROR: destination not allowed (it is not possible to move into an occupied cell). Aborted."<<endl;
             exit(1);
@@ -536,7 +536,7 @@ void LV::print_output()
     {
         for(int y = 0; y < columns; y++)
         {
-            if(grid[x][y] != -1)
+            if(grid[x][y] != EMPTY_CELL)
             {
                 species[grid[x][y]] += 1;
             }
@@ -569,7 +569,7 @@ void LV::get_stats()
     {
         for(int y = 0; y < columns; y++)
         {
-            if(grid[x][y] != -1)
+            if(grid[x][y] != EMPTY_CELL)
             {
                 species[grid[x][y]] += 1;
             }

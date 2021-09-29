@@ -54,7 +54,11 @@ public:
     void get_stats();                       //!< Get the values of the populations.
 };
 
+const int EMPTY_CELL = -1;
+const int NO_ACTIONS = 9;
+
 const int n_colors = 8;
+
 float color_wheel[n_colors][3] 
 {             
     {0.16, 0.53, 0.01},                       //green
